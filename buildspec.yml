@@ -3,4 +3,4 @@ phases:
   install:
     commands:
       - npm install
-      - pip install awscli
+      - pip install --upgrade awscli
