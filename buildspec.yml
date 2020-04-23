@@ -4,4 +4,3 @@ phases:
     commands:
       - npm install
       - pip install awscli
-artifacts:
