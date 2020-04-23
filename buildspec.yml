@@ -1,0 +1,5 @@
+phases:
+  install:
+    commands:
+      - npm install
+      - pip install awscli
