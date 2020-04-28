@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         const log = await Users.findBy({ email }).first();
-        const { username, password } = req.body;
+        
         if (log && bc.compareSync(password, log.password)) {
             if (!username) {
                 res.status(404).json({ message: 'Please provide your username!' });
