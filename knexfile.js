@@ -4,7 +4,13 @@ module.exports = {
 
   development: {
     client: 'pg',
-    connection: process.env.DB_URL,
+    connection: {
+      host: '127.0.0.1',
+      port: '5432',
+      user: 'postgres',
+      password: process.env.PASS,
+      database: 'Artificial-Artist-BE'
+    },
     migrations: {
       directory: './data/migrations',
     },
