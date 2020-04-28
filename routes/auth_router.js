@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const bc = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const secrets = require('../data/secret');
 
 router.post('/register', async (req, res) => {
     const data = req.body;
@@ -49,5 +51,17 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Could not log parent in, please try again later.', err });
     }
 });
+
+function genToken(user) {
+    const payload = {
+        userid: user.id,
+        username: user.username
+    };
+
+    const options = { expiresIn: '12hours' };
+    const token = jwt.sign(payload, secrets.jwtSecret, options);
+
+    return token;
+};
 
 module.exports = router;
