@@ -1,8 +1,8 @@
 const express = require('express');
-const jwt = requrire('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const server = express();
-const apiRouter = require('./api-router');
+const apiRouter = require('./api_router');
 
 server.use(express.json());
 
