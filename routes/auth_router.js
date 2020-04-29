@@ -48,7 +48,7 @@ router.post('/login', async (req, res) => {
             res.status(401).json({ message: 'Credentials incorrect, please try again.', err });
         }
     } catch (err) {
-        res.status(500).json({ message: 'Could not log parent in, please try again later.', err });
+        res.status(500).json({ message: 'Could not log in, please try again later.', err });
     }
 });
 
