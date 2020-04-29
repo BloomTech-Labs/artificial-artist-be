@@ -34,12 +34,12 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
     const log = await Users.findBy({ email }).first();
 
     if (log && bc.compareSync(password, log.password)) {
-      if (!username) {
+      if (!email) {
         res.status(404).json({ message: "Please provide your username!" });
       } else {
         if (!password) {
