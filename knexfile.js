@@ -28,7 +28,13 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DB_URL,
+    connection: {
+      host: 'database-artificialartist-test-pg.ccpwu09bb3on.us-east-1.rds.amazonaws.com',
+      port: '5432',
+      user: 'postgres',
+      password: 'postgres',
+      database: 'database-artificialartist-test-pg'
+    },
     migrations: {
       directory: './data/migrations',
     },
