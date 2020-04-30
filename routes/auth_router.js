@@ -21,7 +21,8 @@ router.post("/register", async (req, res) => {
           res.status(404).json({ message: "Please provide a password!" });
         } else {
           const reg = await Users.add(data);
-          res.status(201).json(reg, token);
+          const token = genToken(reg);
+          res.status(201).json(reg, { token: token });
         }
       }
     }
