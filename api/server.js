@@ -1,9 +1,13 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require("cors");
+const helmet = require("helmet");
 
 const server = express();
 const apiRouter = require('./api_router');
 
+server.use(helmet());
+server.use(cors());
 server.use(express.json());
 
 server.use('/api', apiRouter);
