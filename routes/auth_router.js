@@ -3,6 +3,8 @@ const bc = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../data/secret");
 
+const Users = require("../models/users_model");
+
 router.post("/register", async (req, res) => {
   const data = req.body;
   data.password = bc.hashSync(data.password, 12);
@@ -36,8 +38,9 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
+    console.log("before the model")
     const log = await Users.findBy({ email }).first();
-
+    console.log('after the model')
     if (log && bc.compareSync(password, log.password)) {
       if (!email) {
         res.status(404).json({ message: "Please provide your username!" });
