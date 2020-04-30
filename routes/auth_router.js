@@ -7,10 +7,11 @@ const Users = require("../models/users_model");
 
 router.post("/register", async (req, res) => {
   const data = req.body;
+  const { username, email, password } = req.body;
   data.password = bc.hashSync(data.password, 12);
 
   try {
-    const { username, email, password } = req.body;
+    const reg = await Users.add(data);
     if (!username) {
       res.status(404).json({ message: "Please provide your username!" });
     } else {
@@ -20,9 +21,8 @@ router.post("/register", async (req, res) => {
         if (!password) {
           res.status(404).json({ message: "Please provide a password!" });
         } else {
-          const reg = await Users.add(data);
           const token = genToken(reg);
-          res.status(201).json(reg, { token: token });
+          res.status(201).json({ reg, token: token });
         }
       }
     }
@@ -39,18 +39,19 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const log = await Users.findBy({ email }).first();
-    if (log && bc.compareSync(password, log.password)) {
+    
+    const signIn = await Users.findBy({ email }).first();
+    if (signIn && bc.compareSync(password, signIn.password)) {
       if (!email) {
         res.status(404).json({ message: "Please provide your username!" });
       } else {
         if (!password) {
           res.status(404).json({ message: "Please provide a password!" });
         } else {
-          const token = genToken(log);
+          const token = genToken(signIn);
           res
             .status(200)
-            .json({ message: `Welcome ${log.username}!`, token: token });
+            .json({ signIn, token: token });
         }
       }
     } else {
