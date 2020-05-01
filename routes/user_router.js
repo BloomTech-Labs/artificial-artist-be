@@ -1,5 +1,4 @@
 const router = require('express').Router();
-
 const Users = require('../models/users_model');
 
 router.get('/', async (req, res) => {
@@ -23,3 +22,5 @@ router.get('/:id', async(req, res) => {
         res.send({ message: "Try again later.", err })
     };
 });
+
+module.exports = router;
