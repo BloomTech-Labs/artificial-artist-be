@@ -1,16 +1,18 @@
 const router = require('express').Router();
 const Videos = require('../models/video_model');
+const Songs = require('../models/song_model');
 
-router.get('/', async (req, res) => {
+router.get('/video', async (req, res) => {
     try {
         const videos = await Videos.find();
-        res.json(videos)
+        const songs = await Songs.find();
+        res.json({videos, songs})
     } catch (err) {
         res.send({ message: "Try again later.", err });
     };
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/video/:id', async (req, res) => {
     const { id } = req.params;
     
     try {

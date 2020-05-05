@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Videos = require('../models/video_model');
+const Songs = require('../models/song_model');
 
 router.post('/', async (req, res) => {
     const data = req.body;
@@ -17,7 +18,8 @@ router.post('/', async (req, res) => {
                 } else {
             console.log(data);
                     const video = await Videos.add(data);
-                    console.log(video);
+                    const song = await Songs.add(data)
+                    console.log(video, song);
                     res.status(200).json({ video });
                 }
             }
