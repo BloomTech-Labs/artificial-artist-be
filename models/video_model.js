@@ -10,7 +10,7 @@ module.exports = {
 };
 
 async function add(data) {
-  const [id] = await db("videos").insert(data, "id");
+  const [ id ] = await db("videos").insert(data, "id");
 
   return findById(id);
 }
@@ -24,7 +24,10 @@ function findBy(filter) {
 }
 
 function findById(id) {
-  return db("videos").where({ id }).select().first();
+  return db("videos")
+    .where({ id })
+    .select("location", "video_title")
+    .first();
 }
 
 function update(data, id) {
