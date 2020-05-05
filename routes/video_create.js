@@ -19,8 +19,7 @@ router.post('/', async (req, res) => {
             console.log(data);
                     const video = await Videos.add(data);
                     const song = await Songs.add(data)
-                    console.log(video, song);
-                    res.status(200).json({ video });
+                    res.status(200).json({ video, song });
                 }
             }
         }
