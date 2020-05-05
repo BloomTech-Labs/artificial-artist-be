@@ -14,7 +14,7 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     
     try {
-        const videos = await Videos.findBy(id);
+        const videos = await Videos.findById(id);
         res.json(videos);
     } catch (err) {
         res.send({ message: "Try again later.", err });
