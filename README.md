@@ -6,7 +6,12 @@
 
 # API Documentation
 
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
+#### 1️⃣ Backend delpoyed at AWS ElasticBeanstalk (🚫add URL here) <br>
+
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/22f407bd56973f8acfc5/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/groovn-be/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/22f407bd56973f8acfc5/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/groovn-be/test_coverage)
 
 ## 1️⃣ Getting started
 
@@ -20,7 +25,7 @@ To get the server running locally:
 - **yarn test** to start server using testing environment
 
 ### Backend framework goes here
-
+Node Express
 🚫 Why did you choose this framework?
 
 -    Point One
