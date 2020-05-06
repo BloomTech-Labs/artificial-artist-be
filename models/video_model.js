@@ -16,7 +16,8 @@ async function add(data) {
 }
 
 function find() {
-  return db("videos");
+  return db("videos")
+    .join('songs', 'songs.id', 'videos.song_id');
 }
 
 function findBy(filter) {
@@ -25,8 +26,8 @@ function findBy(filter) {
 
 function findById(id) {
   return db("videos")
-    .where({ id })
-    .select("location", "video_title")
+    .join('songs', 'songs.id', 'videos.song_id')
+    .where({ 'videos.id': id })
     .first();
 }
 

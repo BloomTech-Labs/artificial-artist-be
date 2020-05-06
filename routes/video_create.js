@@ -5,6 +5,16 @@ const Songs = require('../models/song_model');
 router.post('/', async (req, res) => {
     const data = req.body;
     const {video_title, location, song_name} = req.body;
+    const videoObject = {
+        video_title: data.video_title,
+        location: data.location,
+        song_id: data.song_id,
+        user_id: data.user_id     
+    };
+    const songObject = {
+        song_name: data.song_name,
+        artist_name: data.artist_name
+    };
     
     try {
         if (!video_title) {
@@ -16,9 +26,9 @@ router.post('/', async (req, res) => {
                 if (!song_name) {
                     res.status(404).json({ message: "Please provide a song name!" });
                 } else {
-            console.log(data);
-                    const video = await Videos.add(data);
-                    const song = await Songs.add(data)
+            console.log(videoObject, songObject);
+                    const video = await Videos.add(videoObject);
+                    const song = await Songs.add(songObject);
                     res.status(200).json({ video, song });
                 }
             }
