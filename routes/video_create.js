@@ -12,8 +12,11 @@ router.post('/', async (req, res) => {
         user_id: data.user_id     
     };
     const songObject = {
-        song_name: data.song_name,
-        artist_name: data.artist_name
+        deezer_id: data.id,
+        title: data.title,
+        title_short: data.title_short,
+        artist_name: data.artist_name,
+        preview: data.preview
     };
     
     try {
@@ -26,7 +29,7 @@ router.post('/', async (req, res) => {
                 if (!song_name) {
                     res.status(404).json({ message: "Please provide a song name!" });
                 } else {
-            console.log(videoObject, songObject);
+            console.log(videoObject, song);
                     const video = await Videos.add(videoObject);
                     const song = await Songs.add(songObject);
                     res.status(200).json({ video, song });
