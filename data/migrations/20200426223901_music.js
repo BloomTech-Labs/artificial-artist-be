@@ -9,15 +9,16 @@ exports.up = async function (knex, Promise) {
   });
   await knex.schema.createTable("songs", (song) => {
     song.increments();
-    song.string("song_name", 255).notNullable();
-    song.string("artist_name", 255).notNullable();
-    // song.string("song_genre", 255).unique().notNullable();
+    song.integer("deezer_id").unique().notNullable();
+    song.string("title").notNullable();
+    song.string("title_short").notNullable();
+    song.string("artist_name").notNullable();
+    song.string("preview").notNullable();
   });
   await knex.schema.createTable("videos", (video) => {
     video.increments();
     video.string("video_title").unique().notNullable();
     video.string("location").notNullable();
-    video.string("song_name");
     video
       .integer("song_id")
       .unsigned()
