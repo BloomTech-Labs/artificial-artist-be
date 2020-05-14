@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Videos = require("../models/video_model");
+const Videos = require("./video_model");
 const restricted = require("../middleware/restricted_middleware");
 
 router.get("/", async (req, res) => {
