@@ -12,13 +12,14 @@ module.exports = {
 async function add(data) {
   const [ id ] = await db("videos").insert(data, "id");
 
-  return findById(id);
+  return id;
+  // return findById(id);
 }
 
 function find() {
   return db("videos")
     .join('songs', 'songs.id', 'videos.song_id')
-    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.title_short", "songs.artist_name");
+    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.title", "songs.artist_name");
 }
 
 function findBy(filter) {

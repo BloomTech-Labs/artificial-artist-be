@@ -4,28 +4,28 @@ exports.seed = function (knex, Promise) {
     .then(function () {
       return knex("videos").insert([
         {
-          id: 1,
+          // id: 1,
           video_title: "Testing",
           location: "https://www.youtube.com/watch?v=82Q6DRqf9H4",
           song_id: 1,
           user_id: 1,
         },
         {
-          id: 2,
+          // id: 2,
           video_title: "Trying",
           location: "https://www.youtube.com/watch?v=VVrf89SXvTM",
           song_id: 2,
           user_id: 1,
         },
         {
-          id: 3,
+          // id: 3,
           video_title: "King Me",
           location: "https://www.youtube.com/watch?v=coLerbRvgsQ",
           song_id: 3,
           user_id: 2,
         },
         {
-          id: 4,
+          // id: 4,
           video_title: "Weird",
           location: "https://www.youtube.com/watch?v=-e7wiyNO2us",
           song_id: 4,

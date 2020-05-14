@@ -6,7 +6,7 @@ exports.seed = function (knex, Promise) {
     .then(function () {
       return knex("users").insert([
         {
-          id: 1,
+          // id: 1,
           username: "user1",
           password: bc.hashSync("password123", 12),
           email: "abc123@email.com",
@@ -14,7 +14,7 @@ exports.seed = function (knex, Promise) {
           last_name: "Lover",
         },
         {
-          id: 2,
+          // id: 2,
           username: "EmCNerd",
           password: bc.hashSync("password123", 12),
           email: "abcgen@email.com",
@@ -22,7 +22,7 @@ exports.seed = function (knex, Promise) {
           last_name: "Balboa",
         },
         {
-          id: 3,
+          // id: 3,
           username: "DJWannaB",
           password: bc.hashSync("password123", 12),
           email: "gen123@email.com",

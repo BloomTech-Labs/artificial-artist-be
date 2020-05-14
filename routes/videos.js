@@ -42,7 +42,7 @@ router.post("/", restricted, async (req, res) => {
     artist_name: artist
   }
 
-  console.log(songObject);
+  // console.log(songObject);
 
   const videoObject = {
     video_title: video_title,
@@ -51,14 +51,15 @@ router.post("/", restricted, async (req, res) => {
     user_id: user_id
   };
 
-  console.log(videoObject);
+  // console.log(videoObject);
 
   try {
         const song = await Songs.add(songObject);
-
-        // console.log(song);
+        console.log(song);
 
         const videoObjectComplete = { ...videoObject, song_id: song };
+
+        console.log(videoObjectComplete);
 
         // console.log(videoObjectComplete);
         // we want song to return its id
@@ -66,8 +67,9 @@ router.post("/", restricted, async (req, res) => {
         // then we'll 'add' that object to videos.add
         const video = await Videos.add(videoObjectComplete);
 
-        // console.log(video);
+        console.log(video);
 
+        res.status(200).json(song);
         res.status(200).json(video);
         // if (!video_title) {
         //   res.status(400).json({ message: "PLease provide a Video Title!" });
@@ -88,8 +90,9 @@ router.post("/", restricted, async (req, res) => {
         //   }
         // }
       } catch (err) {
-    res.status(500).json({ message: "Try again later!", err });
-  }
+        console.log(err);
+        res.status(500).json({ message: "Try again later!", err });
+      }
 });
 
 
