@@ -1,11 +1,9 @@
 const knex = require('knex');
 
-
 const knexfile = require('../knexfile');
-require('dotenv').config();
 
 const env = process.env.NODE_ENV || 'development';
-
+//directly calling development works for testing where above doesnt
 // const env = 'development';
 const configOptions = knexfile[env];
 

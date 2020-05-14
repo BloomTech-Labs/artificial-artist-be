@@ -1,3 +1,4 @@
+//these tests do not work yet - error finding testing env
 const request = require("supertest");
 const router = require("./api_router");
 

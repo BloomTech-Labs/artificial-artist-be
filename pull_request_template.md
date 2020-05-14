@@ -1,6 +1,6 @@
 # Description
 
-Fixes # (issue) - folders more organized to keep components together, jest testing components added, tables and seeds updated to fix pg auto inc error
+Fixes # (issue) - code adjusted to meet requested changes on review
 
 ## Type of change
 
@@ -13,13 +13,13 @@ Please delete options that are not relevant.
 
 ## Change Status
 
-- [ ] Complete, tested, ready to review and merge
+- [x] Complete, tested, ready to review and merge
 - [ ] Complete, but not tested (may need new tests)
 - [x] Incomplete/work-in-progress, PR is for discussion/feedback
 
 # How Has This Been Tested?
 
-- [ ] Test A
+- [x] Test A - Postman tests of routes to ensure relocation didn't break code
 - [ ] Test B
 
 # Checklist
@@ -27,7 +27,7 @@ Please delete options that are not relevant.
 - [ ] My code follows the style guidelines of this project
 - [x] I have performed a self-review of my own code
 - [ ] My code has been reviewed by at least one peer
-- [ ] I have commented my code, particularly in hard-to-understand areas
+- [x] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
