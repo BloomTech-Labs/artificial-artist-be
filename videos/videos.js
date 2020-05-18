@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Videos = require("./video_model");
-const Songs = require("../songs/song_model");
+const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
 
 router.get("/", async (req, res) => {
@@ -54,12 +54,17 @@ router.post("/", restricted, async (req, res) => {
   // console.log(videoObject);
 
   try {
+        // Start with request to DS server, should get a 200 immediately if working
+        // Then go to rest of functions
+        // Potentially explore 
         const song = await Songs.add(songObject);
-        console.log(song);
+        // console.log(song);
 
         const videoObjectComplete = { ...videoObject, song_id: song };
 
-        console.log(videoObjectComplete);
+        // console.log(videoObjectComplete);
+
+
 
         // console.log(videoObjectComplete);
         // we want song to return its id
@@ -67,10 +72,16 @@ router.post("/", restricted, async (req, res) => {
         // then we'll 'add' that object to videos.add
         const video = await Videos.add(videoObjectComplete);
 
-        console.log(video);
+        objectIds = {
+          songId: song,
+          videoId: video
+        }
 
-        res.status(200).json(song);
-        res.status(200).json(video);
+        console.log(objectIds);
+
+        // console.log(video);
+
+        res.status(200).json(objectIds);
         // if (!video_title) {
         //   res.status(400).json({ message: "PLease provide a Video Title!" });
         // } else {
