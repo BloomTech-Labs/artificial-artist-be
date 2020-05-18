@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Videos = require("./video_model");
 const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
+const axios = require('axios')
 
 router.get("/", async (req, res) => {
   try {
@@ -42,8 +43,6 @@ router.post("/", restricted, async (req, res) => {
     artist_name: artist
   }
 
-  // console.log(songObject);
-
   const videoObject = {
     video_title: video_title,
     location: location,
@@ -57,6 +56,7 @@ router.post("/", restricted, async (req, res) => {
         // Start with request to DS server, should get a 200 immediately if working
         // Then go to rest of functions
         // Potentially explore 
+
         const song = await Songs.add(songObject);
         // console.log(song);
 
@@ -72,10 +72,22 @@ router.post("/", restricted, async (req, res) => {
         // then we'll 'add' that object to videos.add
         const video = await Videos.add(videoObjectComplete);
 
+        axios
+          .post(
+            "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry", null,
+            {
+              params: {
+                preview: preview,
+                video_id: video,
+              }
+            }
+          )
+          .catch((err) => console.log(err));
+
         objectIds = {
           songId: song,
           videoId: video
-        }
+        };
 
         console.log(objectIds);
 
@@ -106,6 +118,39 @@ router.post("/", restricted, async (req, res) => {
       }
 });
 
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
 
+  console.log(id);
+  console.log(data);
+
+  Videos.update(data, id)
+    .then((updatedVideo) => {
+      console.log(updatedVideo);
+      res.status(200).json({ message: "Successfully updated video!", data });
+    })
+    .catch((err) => {
+      // res.status(500).json({ message: "Something failed", err });
+      console.log(err);
+      res.status(500).json({ message: "Something failed", err });
+      
+    });
+
+  // try {
+  //   const changed = await Videos.findById(id);
+
+  //   if (changed) {
+  //     Videos.update(data, id)
+  //     .then(updatedVideo => {
+  //       res.status(200).json({ message: "Successfully updated video!", data })
+  //     })
+  //   } else {
+  //     res.status(404).json({ message: "Could not find video!"})
+  //   }
+  // } catch (err) {
+  //   res.status(500).json({ message: "Try again later.", err });
+  // };
+});
 
 module.exports = router;

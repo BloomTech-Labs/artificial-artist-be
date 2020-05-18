@@ -35,7 +35,7 @@ function findById(id) {
 }
 
 function update(data, id) {
-  return db("videos").where(id).update(data);
+  return db("videos").where("id", id).update(data).returning("id");
 }
 
 function remove(id) {
