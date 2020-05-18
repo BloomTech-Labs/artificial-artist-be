@@ -12,7 +12,8 @@ module.exports = {
 async function add(data) {
   const [ id ] = await db("videos").insert(data, "id");
 
-  return findById(id);
+  return id;
+  // return findById(id);
 }
 
 function find() {
@@ -34,7 +35,7 @@ function findById(id) {
 }
 
 function update(data, id) {
-  return db("videos").where(id).update(data);
+  return db("videos").where("id", id).update(data).returning("id");
 }
 
 function remove(id) {
