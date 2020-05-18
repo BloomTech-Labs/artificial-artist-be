@@ -13,7 +13,7 @@ router.use('/videos', videos);
 router.use('/songs', restricted, songs);
 
 router.get('/', (req, res) => {
-    res.json('Artificial Artist API');
+    res.status(200).json('Artificial Artist API');
 });
 
 module.exports = router;

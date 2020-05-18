@@ -28,7 +28,7 @@ function findBy(filter) {
 function findById(id) {
   return db("videos")
     .join('songs', 'songs.id', 'videos.song_id')
-    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.title_short", "songs.artist_name")
+    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.artist_name")
     .where({ 'videos.id': id })
     .first();
 }
