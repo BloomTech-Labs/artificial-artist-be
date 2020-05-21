@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Videos = require("./video_model");
 const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
-const axios = require('axios')
+const axios = require("axios");
 
 router.get("/", async (req, res) => {
   try {
@@ -31,91 +31,108 @@ router.get("/:id", async (req, res) => {
 // videos: video_title, location
 // We'll want to adjust the model to allow for both
 
-
 router.post("/", restricted, async (req, res) => {
   // this should be unnecessary because we're rebuilding objects
   // const data = req.body;
-  const { title_short, preview, artist, deezer_id, location, video_title, user_id } = req.body;
+  const {
+    title_short,
+    preview,
+    artist,
+    deezer_id,
+    location,
+    video_title,
+    user_id,
+  } = req.body;
 
   const songObject = {
     deezer_id: deezer_id,
     title: title_short,
-    artist_name: artist
-  }
+    artist_name: artist,
+  };
 
   const videoObject = {
     video_title: video_title,
     location: location,
     song_id: "",
-    user_id: user_id
+    user_id: user_id,
   };
 
   // console.log(videoObject);
+  // console.log(songObject);
 
   try {
-        // Start with request to DS server, should get a 200 immediately if working
-        // Then go to rest of functions
-        // Potentially explore 
+    if (!title_short) {
+      res.status(400).json({ message: "Missing title_short!" });
+    } else {
+      if (!preview) {
+        res.status(400).json({ message: "Missing preview!" });
+      } else {
+        if (!artist) {
+          res.status(400).json({ message: "Missing artist!" });
+        } else {
+          if (!deezer_id) {
+            res.status(400).json({ message: "Missing deezer_id!" });
+          } else {
+            if (!location) {
+              res.status(400).json({ message: "Missing location!" });
+            } else {
+              if (!video_title) {
+                res.status(400).json({ message: "Missing video_title!" });
+              } else {
+                if (!user_id) {
+                  res.status(400).json({ message: "Missing user_id!" });
+                } else {
+                  // Start with request to DS server, should get a 200 immediately if working
+                  // Then go to rest of functions
+                  // Potentially explore
 
-        const song = await Songs.add(songObject);
-        // console.log(song);
+                  const song = await Songs.add(songObject);
+                  // console.log(song);
 
-        const videoObjectComplete = { ...videoObject, song_id: song };
+                  const videoObjectComplete = { ...videoObject, song_id: song };
 
-        // console.log(videoObjectComplete);
+                  // console.log(videoObjectComplete);
 
+                  // console.log(videoObjectComplete);
+                  // we want song to return its id
+                  // then we'll destructure or spread some object to add that in
+                  // then we'll 'add' that object to videos.add
+                  const video = await Videos.add(videoObjectComplete);
+                  console.log(video);
+                  axios
+                    .post(
+                      "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry",
+                      null,
+                      {
+                        params: {
+                          preview: preview,
+                          video_id: video,
+                        },
+                      }
+                    )
+                    .catch((err) => console.log(err));
 
+                  objectIds = {
+                    songId: song,
+                    videoId: video,
+                  };
 
-        // console.log(videoObjectComplete);
-        // we want song to return its id
-        // then we'll destructure or spread some object to add that in
-        // then we'll 'add' that object to videos.add
-        const video = await Videos.add(videoObjectComplete);
+                  console.log(objectIds);
 
-        axios
-          .post(
-            "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry", null,
-            {
-              params: {
-                preview: preview,
-                video_id: video,
+                  // console.log(video);
+
+                  res.status(200).json(objectIds);
+                }
               }
             }
-          )
-          .catch((err) => console.log(err));
-
-        objectIds = {
-          songId: song,
-          videoId: video
-        };
-
-        console.log(objectIds);
-
-        // console.log(video);
-
-        res.status(200).json(objectIds);
-        // if (!video_title) {
-        //   res.status(400).json({ message: "PLease provide a Video Title!" });
-        // } else {
-        //   if (!location) {
-        //     res.status(400).json({ message: "Please provide a location!" });
-        //   } else {
-        //     if (!song_id) {
-        //       res.status(400).json({ message: "Please provide a song!" });
-        //     } else {
-        //       if (!user_id) {
-        //         res.status(400).json({ message: "Please provide a user!" });
-        //       } else {
-        //         const video = await Videos.add(data);
-        //         res.status(200).json(video);
-        //       }
-        //     }
-        //   }
-        // }
-      } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: "Try again later!", err });
+          }
+        }
       }
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Try again later!", err });
+  }
 });
 
 router.put("/:id", (req, res) => {
@@ -134,7 +151,6 @@ router.put("/:id", (req, res) => {
       // res.status(500).json({ message: "Something failed", err });
       console.log(err);
       res.status(500).json({ message: "Something failed", err });
-      
     });
 
   // try {
