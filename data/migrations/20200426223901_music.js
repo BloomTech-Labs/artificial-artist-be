@@ -11,13 +11,11 @@ exports.up = async function (knex, Promise) {
     song.increments();
     song.integer("deezer_id").unique().notNullable();
     song.string("title").notNullable();
-    song.string("title_short").notNullable();
     song.string("artist_name").notNullable();
-    song.string("preview").notNullable();
   });
   await knex.schema.createTable("videos", (video) => {
     video.increments();
-    video.string("video_title").unique().notNullable();
+    video.string("video_title").notNullable();
     video.string("location").notNullable();
     video
       .integer("song_id")

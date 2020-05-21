@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const restricted = require('../middleware/restricted_middleware');
-const authRouter = require('../routes/auth_router');
-const userRouter = require('../routes/user_router');
-const video_update = require('../routes/video_update');
-const videos = require('../routes/videos');
-const songs = require('../routes/songs');
+const authRouter = require('../auth/auth_router');
+const userRouter = require('../users/users_router');
+const video_update = require('../videos/video_update');
+const videos = require('../videos/videos');
+const songs = require('../songs/songs');
 
 router.use('/auth', authRouter);
 router.use('/users', restricted, userRouter);
