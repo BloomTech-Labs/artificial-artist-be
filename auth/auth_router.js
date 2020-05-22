@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
           } else {
             if (!last_name) {
               res.status(404).json({ message: "Please provide your last_name!" });
-            }else {
+            } else {
               const token = genToken(reg);
               res.status(201).json({ reg, token: token });
             }
