@@ -135,7 +135,7 @@ router.post("/", restricted, async (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", restricted, (req, res) => {
   const { id } = req.params;
   const data = req.body;
 
