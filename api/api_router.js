@@ -7,7 +7,7 @@ const videos = require('../videos/videos');
 const songs = require('../songs/songs');
 
 router.use('/auth', authRouter);
-router.use('/user', restricted, userRouter);
+router.use('/users', restricted, userRouter);
 router.use('/update-video', video_update);
 router.use('/videos', videos);
 router.use('/songs', restricted, songs);
