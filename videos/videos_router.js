@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Videos = require("./video_model");
+const Videos = require("./videos_model");
 const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
 const axios = require("axios");
@@ -10,15 +10,6 @@ router.get("/", async (req, res) => {
     res.status(200).json({ videos });
   } catch (err) {
     res.status(500).json({ message: "Try again later.", err });
-  }
-});
-
-router.get("/random9", async (req, res) => {
-  try {
-    const {rows} = await Videos.find9();
-    res.status(200).json({rows});
-  } catch ({message}) {
-    res.status(500).json({errorMessage: `Encountered |*||${message}|*| while retrieving videos from the database.`});
   }
 });
 
@@ -47,14 +38,14 @@ router.post("/", restricted, async (req, res) => {
   const songObject = {
     deezer_id: deezer_id,
     title: title_short,
-    artist_name: artist,
+    artist_name: artist
   };
 
   const videoObject = {
     video_title: video_title,
     location: location,
     song_id: "",
-    user_id: user_id,
+    user_id: user_id
   };
 
   try {
@@ -79,6 +70,7 @@ router.post("/", restricted, async (req, res) => {
                 if (!user_id) {
                   res.status(400).json({ message: "Missing user_id!" });
                 } else {
+
                   const song = await Songs.add(songObject);
 
                   const videoObjectComplete = { ...videoObject, song_id: song };
@@ -95,7 +87,7 @@ router.post("/", restricted, async (req, res) => {
                       {
                         params: {
                           preview: preview,
-                          video_id: video,
+                          video_id: video
                         },
                       }
                     )
@@ -103,10 +95,10 @@ router.post("/", restricted, async (req, res) => {
 
                   objectIds = {
                     songId: song,
-                    videoId: video,
+                    videoId: video
                   };
 
-                  console.log(objectIds);
+                  console.log(objectIds);;
 
                   res.status(200).json(objectIds);
                 }
@@ -138,6 +130,7 @@ router.put("/:id", restricted, (req, res) => {
       console.log(err);
       res.status(500).json({ message: "Something failed", err });
     });
+
 });
 
 module.exports = router;
