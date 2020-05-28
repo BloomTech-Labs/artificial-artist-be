@@ -13,6 +13,15 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/random9", async (req, res) => {
+  try {
+    const {rows} = await Videos.find9();
+    res.status(200).json({rows});
+  } catch ({message}) {
+    res.status(500).json({errorMessage: `Encountered |*||${message}|*| while retrieving videos from the database.`});
+  }
+});
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -98,7 +107,7 @@ router.post("/", restricted, async (req, res) => {
                     videoId: video
                   };
 
-                  console.log(objectIds);;
+                  console.log(objectIds);
 
                   res.status(200).json(objectIds);
                 }
