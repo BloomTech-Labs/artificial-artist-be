@@ -7,19 +7,32 @@ module.exports = {
   findById,
   update,
   remove,
+  find9,
 };
 
 async function add(data) {
-  const [ id ] = await db("videos").insert(data, "id");
+  const [id] = await db("videos").insert(data, "id");
 
   return id;
   // return findById(id);
 }
 
+function find9() {
+  const res= db.raw("select * from videos ORDER BY random() limit 9 ");
+  return res;
+}
+
 function find() {
   return db("videos")
-    .join('songs', 'songs.id', 'videos.song_id')
-    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.title", "songs.artist_name");
+    .join("songs", "songs.id", "videos.song_id")
+    .select(
+      "videos.id",
+      "videos.video_title",
+      "videos.location",
+      "videos.song_id",
+      "songs.title",
+      "songs.artist_name"
+    )
 }
 
 function findBy(filter) {
@@ -28,9 +41,16 @@ function findBy(filter) {
 
 function findById(id) {
   return db("videos")
-    .join('songs', 'songs.id', 'videos.song_id')
-    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.title_short", "songs.artist_name")
-    .where({ 'videos.id': id })
+    .join("songs", "songs.id", "videos.song_id")
+    .select(
+      "videos.id",
+      "videos.video_title",
+      "videos.location",
+      "videos.song_id",
+      "songs.title_short",
+      "songs.artist_name"
+    )
+    .where({ "videos.id": id })
     .first();
 }
 
