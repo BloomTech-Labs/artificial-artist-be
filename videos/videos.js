@@ -3,6 +3,8 @@ const Videos = require("./video_model");
 const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
 const axios = require('axios')
+const uuid = require("uuid");
+const AWS = require("aws-sdk");
 
 router.get("/", async (req, res) => {
   try {
@@ -15,6 +17,34 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
+
+  try {
+    const video = await Videos.findById(id);
+    res.status(200).json(video);
+  } catch (err) {
+    res.status(500).json({ message: "Try again later.", err });
+  }
+});
+
+// AWS.config.update({
+//   subregion: "us-west-1",
+//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+// });
+
+// const s3 = new AWS.S3();
+
+// s3.headObject(params, function (err, metadata) {
+//   if (err && err.code === "NotFound") {
+//     // Handle no object on cloud here
+//   } else {
+//     s3.getSignedUrl("getObject", params, callback);
+//   }
+// });
+
+// Check if S3 file exists
+router.get("/check-for-file", async (req, res) => {
+  const { fileName } = req.body;
 
   try {
     const video = await Videos.findById(id);
@@ -72,21 +102,24 @@ router.post("/", restricted, async (req, res) => {
         // then we'll 'add' that object to videos.add
         const video = await Videos.add(videoObjectComplete);
 
+        const videoId = uuid.v4();
+
         axios
           .post(
-            "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry", null,
+            "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry",
+            null,
             {
               params: {
                 preview: preview,
-                video_id: video,
-              }
+                video_id: videoId,
+              },
             }
           )
           .catch((err) => console.log(err));
 
         objectIds = {
           songId: song,
-          videoId: video
+          videoId: videoId,
         };
 
         console.log(objectIds);
