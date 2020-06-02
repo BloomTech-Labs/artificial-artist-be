@@ -62,10 +62,48 @@ exports.seed = function (knex, Promise) {
         },
         {
           video_title: "the way of the web",
+          location: "https://artificial-artist.s3.amazonaws.com/3.mp4",
+          song_id: 9,
+          user_id: 1,
+        },
+        {
+          video_title: "the way of the web",
+          location: "https://artificial-artist.s3.amazonaws.com/8.mp4",
+          song_id: 9,
+          user_id: 1,
+        },
+        {
+          video_title: "the way of the web",
           location: "https://artificial-artist.s3.amazonaws.com/10.mp4",
           song_id: 9,
           user_id: 1,
         },
+        {
+          video_title: "the way of the web",
+          location: "https://artificial-artist.s3.amazonaws.com/20.mp4",
+          song_id: 9,
+          user_id: 1,
+        },
+        {
+          video_title: "flowertopia",
+          location: "https://artificial-artist.s3.amazonaws.com/26.mp4",
+          song_id: 9,
+          user_id: 1,
+        },
+        {
+          video_title: "dafting",
+          location: "https://artificial-artist.s3.amazonaws.com/dafting.mp4",
+          song_id: 9,
+          user_id: 1,
+        },
+        {
+          video_title: "B'ird'yonce",
+          location: "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/beyonce--drunk_in_love-birdyonce.mp4",
+          song_id: 9,
+          user_id: 1,
+        },
+
+
       ]);
     });
 };
