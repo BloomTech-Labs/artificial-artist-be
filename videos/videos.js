@@ -26,32 +26,27 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// AWS.config.update({
-//   subregion: "us-west-1",
-//   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-//   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-// });
+AWS.config.update({
+  subregion: "us-east-1",
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
 
-// const s3 = new AWS.S3();
+const s3 = new AWS.S3();
 
-// s3.headObject(params, function (err, metadata) {
-//   if (err && err.code === "NotFound") {
-//     // Handle no object on cloud here
-//   } else {
-//     s3.getSignedUrl("getObject", params, callback);
-//   }
-// });
+
 
 // Check if S3 file exists
-router.get("/check-for-file", async (req, res) => {
+router.get("/check-for-file", (req, res) => {
   const { fileName } = req.body;
 
-  try {
-    const video = await Videos.findById(id);
-    res.status(200).json(video);
-  } catch (err) {
-    res.status(500).json({ message: "Try again later.", err });
-  }
+  s3.headObject(params, function (err, metadata) {
+    if (err && err.code === "NotFound") {
+      // Handle no object on cloud here
+    } else {
+      s3.getSignedUrl("getObject", params, callback);
+    }
+  });
 });
 
 // if you post to video
