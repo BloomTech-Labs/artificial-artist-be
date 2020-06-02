@@ -30,16 +30,16 @@ router.post("/", async (req, res) => {
 
   try {
     if (!deezer_id) {
-      res.status(400).json({ message: "Please provide a song!" });
+      res.status(400).json({ message: "Missing deezer_id!" });
     } else {
       if (!title_short) {
-        res.status(400).json({ message: "Please provide a song title!" });
+        res.status(400).json({ message: "Missing title_short!" });
       } else {
         if (!artist_name) {
-          res.status(400).json({ message: "Please provide an artist name!" });
+          res.status(400).json({ message: "Missing artist_name!" });
         } else {
           if (!preview) {
-            res.status(400).json({ message: "Please include a song!" });
+            res.status(400).json({ message: "Missing preview!" });
           } else {
             const song = await Songs.add(data);
             res.status(200).json(song);

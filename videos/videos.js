@@ -63,15 +63,21 @@ router.get("/check-for-file", async (req, res) => {
 
 
 router.post("/", restricted, async (req, res) => {
-  // this should be unnecessary because we're rebuilding objects
-  // const data = req.body;
-  const { title_short, preview, artist, deezer_id, location, video_title, user_id } = req.body;
+  const {
+    title_short,
+    preview,
+    artist,
+    deezer_id,
+    location,
+    video_title,
+    user_id,
+  } = req.body;
 
   const songObject = {
     deezer_id: deezer_id,
     title: title_short,
     artist_name: artist
-  }
+  };
 
   const videoObject = {
     video_title: video_title,
@@ -80,78 +86,74 @@ router.post("/", restricted, async (req, res) => {
     user_id: user_id
   };
 
-  // console.log(videoObject);
-
   try {
-        // Start with request to DS server, should get a 200 immediately if working
-        // Then go to rest of functions
-        // Potentially explore 
+    if (!title_short) {
+      res.status(400).json({ message: "Missing title_short!" });
+    } else {
+      if (!preview) {
+        res.status(400).json({ message: "Missing preview!" });
+      } else {
+        if (!artist) {
+          res.status(400).json({ message: "Missing artist!" });
+        } else {
+          if (!deezer_id) {
+            res.status(400).json({ message: "Missing deezer_id!" });
+          } else {
+            if (!location) {
+              res.status(400).json({ message: "Missing location!" });
+            } else {
+              if (!video_title) {
+                res.status(400).json({ message: "Missing video_title!" });
+              } else {
+                if (!user_id) {
+                  res.status(400).json({ message: "Missing user_id!" });
+                } else {
 
-        const song = await Songs.add(songObject);
-        // console.log(song);
+                  const song = await Songs.add(songObject);
 
-        const videoObjectComplete = { ...videoObject, song_id: song };
+                  const videoObjectComplete = { ...videoObject, song_id: song };
 
-        // console.log(videoObjectComplete);
+                  // we want song to return its id
+                  // then we'll destructure or spread some object to add that in
+                  // then we'll 'add' that object to videos.add
+                  const video = await Videos.add(videoObjectComplete);
+                  const videoId = uuid.v4();
+                  
+                  axios
+                    .post(
+                      "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry",
+                      null,
+                      {
+                        params: {
+                          preview: preview,
+                          video_id: videoId
+                        },
+                      }
+                    )
+                    .catch((err) => console.log(err));
 
+                  objectIds = {
+                    songId: song,
+                    videoId: video
+                  };
 
+                  console.log(objectIds);;
 
-        // console.log(videoObjectComplete);
-        // we want song to return its id
-        // then we'll destructure or spread some object to add that in
-        // then we'll 'add' that object to videos.add
-        const video = await Videos.add(videoObjectComplete);
-
-        const videoId = uuid.v4();
-
-        axios
-          .post(
-            "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry",
-            null,
-            {
-              params: {
-                preview: preview,
-                video_id: videoId,
-              },
+                  res.status(200).json(objectIds);
+                }
+              }
             }
-          )
-          .catch((err) => console.log(err));
-
-        objectIds = {
-          songId: song,
-          videoId: videoId,
-        };
-
-        console.log(objectIds);
-
-        // console.log(video);
-
-        res.status(200).json(objectIds);
-        // if (!video_title) {
-        //   res.status(400).json({ message: "PLease provide a Video Title!" });
-        // } else {
-        //   if (!location) {
-        //     res.status(400).json({ message: "Please provide a location!" });
-        //   } else {
-        //     if (!song_id) {
-        //       res.status(400).json({ message: "Please provide a song!" });
-        //     } else {
-        //       if (!user_id) {
-        //         res.status(400).json({ message: "Please provide a user!" });
-        //       } else {
-        //         const video = await Videos.add(data);
-        //         res.status(200).json(video);
-        //       }
-        //     }
-        //   }
-        // }
-      } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: "Try again later!", err });
+          }
+        }
       }
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Try again later!", err });
+  }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", restricted, (req, res) => {
   const { id } = req.params;
   const data = req.body;
 
@@ -164,26 +166,10 @@ router.put("/:id", (req, res) => {
       res.status(200).json({ message: "Successfully updated video!", data });
     })
     .catch((err) => {
-      // res.status(500).json({ message: "Something failed", err });
       console.log(err);
       res.status(500).json({ message: "Something failed", err });
-      
     });
 
-  // try {
-  //   const changed = await Videos.findById(id);
-
-  //   if (changed) {
-  //     Videos.update(data, id)
-  //     .then(updatedVideo => {
-  //       res.status(200).json({ message: "Successfully updated video!", data })
-  //     })
-  //   } else {
-  //     res.status(404).json({ message: "Could not find video!"})
-  //   }
-  // } catch (err) {
-  //   res.status(500).json({ message: "Try again later.", err });
-  // };
 });
 
 module.exports = router;
