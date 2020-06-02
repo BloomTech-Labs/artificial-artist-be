@@ -5,13 +5,14 @@ const restricted = require("../middleware/restricted_middleware");
 const axios = require('axios')
 const uuid = require("uuid");
 const AWS = require("aws-sdk");
+require("dotenv").config();
 
 router.get("/", async (req, res) => {
   try {
     const videos = await Videos.find();
     res.status(200).json({ videos });
   } catch (err) {
-    res.status(500).json({ message: "Try again later.", err });
+    res.status(500).json({ message: "Try again later 1", err });
   }
 });
 
@@ -22,7 +23,7 @@ router.get("/:id", async (req, res) => {
     const video = await Videos.findById(id);
     res.status(200).json(video);
   } catch (err) {
-    res.status(500).json({ message: "Try again later.", err });
+    res.status(500).json({ message: "Try again later 2", err });
   }
 });
 
@@ -34,19 +35,30 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-
-
 // Check if S3 file exists
-router.get("/check-for-file", (req, res) => {
-  const { fileName } = req.body;
-
-  s3.headObject(params, function (err, metadata) {
-    if (err && err.code === "NotFound") {
-      // Handle no object on cloud here
-    } else {
-      s3.getSignedUrl("getObject", params, callback);
+router.get("/single/check-for-file", async (req, res) => {
+    const { fileName } = req.body;
+    console.log(req.body);
+    const params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: fileName,
+    };
+    console.log(params);
+    try {
+      s3.headObject(params, function (err, metadata) {
+        if (err && err.code === "NotFound") {
+          // Handle no object on cloud here
+          console.log(err);
+        } else {
+          s3.getSignedUrl("getObject", params, (err, data) => {
+            if (err) res.status(500).json({ message: err });
+            else     res.status(200).json({ message: data });
+          });
+        }
+      });
+    } catch (err) {
+      res.status(500).json({ message: "You've found me", err });
     }
-  });
 });
 
 // if you post to video
@@ -76,9 +88,10 @@ router.post("/", restricted, async (req, res) => {
 
   const videoObject = {
     video_title: video_title,
+    // location will be known and use a UUID plus this https://artificial-artist.s3.amazonaws.com/
     location: location,
     song_id: "",
-    user_id: user_id
+    user_id: user_id,
   };
 
   try {
@@ -144,7 +157,7 @@ router.post("/", restricted, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ message: "Try again later!", err });
+    res.status(500).json({ message: "Try again later 3", err });
   }
 });
 
