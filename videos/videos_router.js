@@ -17,8 +17,8 @@ router.get("/random9", async (req, res) => {
   try {
     const {rows} = await Videos.find9();
     res.status(200).json({rows});
-  } catch ({message}) {
-    res.status(500).json({errorMessage: `Encountered |*||${message}|*| while retrieving videos from the database.`});
+  } catch ({err}) {
+    res.status(500).json({errorMessage: `Encountered ${err} while retrieving videos from the database.`});
   }
 });
 
