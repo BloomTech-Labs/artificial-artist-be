@@ -4,63 +4,63 @@ exports.seed = function (knex, Promise) {
     .then(function () {
       return knex("videos").insert([
         {
-          video_title: "Testing",
+          video_title: "Today was A good Day for Lo Mein,
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/mayhem--push_every_button-testing--82Q6DRqf9H4.mp4",
+            "https://artificial-artist.s3.amazonaws.com/cube.mp4",
           thumbnail: "",
           videoCreated: true,
           song_id: 1,
           user_id: 1,
         },
         {
-          video_title: "Trying",
+          video_title: "Cali Loves Mashed Potatoes",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/mitis--endeavour-trying--VVrf89SXvTM.mp4",
+            "https://artificial-artist.s3.amazonaws.com/CAlove.mp4",
           thumbnail: "",
           videoCreated: true,
           song_id: 2,
           user_id: 1,
         },
         {
-          video_title: "King Me",
+          video_title: "Today Was A Good Day For Quail",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/billieeilish--you_should_see_me_in_a_crown-king_me_-coLerbRvgsQ.mp4",
+            "https://artificial-artist.s3.amazonaws.com/None.mp4",
           thumbnail: "",
           videoCreated: true,
           song_id: 3,
           user_id: 2,
         },
         {
-          video_title: "Weird",
+          video_title: "Blooming Accordians",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/billieeilish--ilomilo_weird_-e7wiyNO2us.mp4",
+            "https://artificial-artist.s3.amazonaws.com/26.mp4",
           thumbnail: "",
           videoCreated: true,
           song_id: 4,
           user_id: 2,
         },
         {
-          video_title: "Boom",
+          video_title: "Basketball Symphony",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/runsblov--future_bass_-boom_h-f9Zgdo6I8%26t.mp4",
+            "https://artificial-artist.s3.amazonaws.com/bo1.mp4",
           thumbnail: "",
           videoCreated: true,
           song_id: 5,
           user_id: 3,
         },
         {
-          video_title: "Dubs",
+          video_title: "The Dont Stop Believing Bus",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/lazaoaza--action_dubstep_-dubs_VqCm327iSwQ.mp4",
+            "https://artificial-artist.s3.amazonaws.com/bri3.mp4",
           thumbnail: "",
           videoCreated: true,
           song_id: 6,
           user_id: 3,
         },
         {
-          video_title: "Bud",
+          video_title: "Tuxedos Floating on a River",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/progressencefunky_reggae_dubstep_-bud_R2oxSIN6rdY.mp4",
+            "https://artificial-artist.s3.amazonaws.com/bri1.mp4",
           thumbnail: "",
           videoCreated: true,
           song_id: 7,
@@ -69,7 +69,7 @@ exports.seed = function (knex, Promise) {
         {
           video_title: "TarantulaCrisp",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/TarantulaCrisp.mp4",
+            "https://artificial-artist.s3.amazonaws.com/TarantulaCrisp.mp4",
           thumbnail: "https://i.imgur.com/2Zfzdcw.jpg",
           videoCreated: true,
           song_id: 8,
@@ -124,9 +124,9 @@ exports.seed = function (knex, Promise) {
           user_id: 1,
         },
         {
-          video_title: "B'ird'yonce",
+          video_title: "Collies on my mind",
           location:
-            "https://elasticbeanstalk-us-east-1-427400502172.s3.amazonaws.com/Videosforbackend/beyonce--drunk_in_love-birdyonce.mp4",
+            "https://artificial-artist.s3.amazonaws.com/bri2.mp4",
           thumbnail: "https://imgur.com/lLeteDr",
           videoCreated: true,
           song_id: 9,
