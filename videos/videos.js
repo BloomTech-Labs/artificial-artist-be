@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", restricted, async (req, res) => {
-  const {
+  const keys = {
     title_short,
     preview,
     artist,
@@ -49,28 +49,60 @@ router.post("/", restricted, async (req, res) => {
   };
 
   try {
-    if (!title_short) {
-      res.status(400).json({ message: "Missing title_short!" });
-    } else {
-      if (!preview) {
-        res.status(400).json({ message: "Missing preview!" });
-      } else {
-        if (!artist) {
-          res.status(400).json({ message: "Missing artist!" });
-        } else {
-          if (!deezer_id) {
-            res.status(400).json({ message: "Missing deezer_id!" });
-          } else {
-            if (!location) {
-              res.status(400).json({ message: "Missing location!" });
-            } else {
-              if (!video_title) {
-                res.status(400).json({ message: "Missing video_title!" });
-              } else {
-                if (!user_id) {
-                  res.status(400).json({ message: "Missing user_id!" });
-                } else {
+    // if (!title_short) {
+    //   res.status(400).json({ message: "Missing title_short!" });
+    // } else {
+    //   if (!preview) {
+    //     res.status(400).json({ message: "Missing preview!" });
+    //   } else {
+    //     if (!artist) {
+    //       res.status(400).json({ message: "Missing artist!" });
+    //     } else {
+    //       if (!deezer_id) {
+    //         res.status(400).json({ message: "Missing deezer_id!" });
+    //       } else {
+    //         if (!location) {
+    //           res.status(400).json({ message: "Missing location!" });
+    //         } else {
+    //           if (!video_title) {
+    //             res.status(400).json({ message: "Missing video_title!" });
+    //           } else {
+    //             if (!user_id) {
+    //               res.status(400).json({ message: "Missing user_id!" });
+    //             } else {
 
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    switch(keys) {
+      case !'title_short':
+        res.status(400).json({ message: "Missing title_short!" });
+      break;
+      case !'preview':
+        res.status(400).json({ message: "Missing preview!" });
+      break;
+      case !'artist':
+        res.status(400).json({ message: "Missing artist!" });
+      break;
+      case !'deezer_id':
+        res.status(400).json({ message: "Missing deezer_id!" });
+      break;
+      case !'location':
+        res.status(400).json({ message: "Missing location!" });
+      break;
+      case !'video_title':
+        res.status(400).json({ message: "Missing video_title!" });
+      break;
+      case !'user_id':
+        res.status(400).json({ message: "Missing user_id!" });
+      break;
+      default:
+    
+      
                   const song = await Songs.add(songObject);
 
                   const videoObjectComplete = { ...videoObject, song_id: song };
@@ -102,12 +134,6 @@ router.post("/", restricted, async (req, res) => {
 
                   res.status(200).json(objectIds);
                 }
-              }
-            }
-          }
-        }
-      }
-    }
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Try again later!", err });
