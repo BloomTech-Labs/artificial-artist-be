@@ -5,6 +5,7 @@ module.exports = {
   find,
   findBy,
   findById,
+  findByUser,
   update,
   remove,
   find9,
@@ -18,7 +19,7 @@ async function add(data) {
 }
 
 function find9() {
-  const res= db.raw("select * from videos ORDER BY random() limit 9 ");
+  const res = db.raw("select * from videos ORDER BY random() limit 9 ");
   return res;
 }
 
@@ -32,7 +33,7 @@ function find() {
       "videos.song_id",
       "songs.title",
       "songs.artist_name"
-    )
+    );
 }
 
 function findBy(filter) {
@@ -52,6 +53,17 @@ function findById(id) {
     )
     .where({ "videos.id": id })
     .first();
+}
+
+function findByUser(id) {
+  return db("videos")
+    .select(
+      "videos.id",
+      "videos.video_title",
+      "videos.location",
+      "videos.user_id"
+    )
+    .where({ "videos.user_id": id });
 }
 
 function update(data, id) {
