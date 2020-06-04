@@ -29,7 +29,7 @@ router.get("/username/:username", async (req, res) => {
     const id = await Users.findIdByUsername(username);
     res.json(id);
   } catch (err) {
-    res.send({ message: "Try again later.", err });
+    res.status(500).send({ message: "Try again later.", err });
   }
 });
 
