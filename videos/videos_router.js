@@ -33,6 +33,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/user/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const userVideos = await Videos.findByUser(userId);
+    res.status(200).json(userVideos);
+  } catch (err) {
+    res.status(500).json({ message: "Try again later.", err });
+  }
+});
+
 router.post("/", restricted, async (req, res) => {
   const {
     title_short,
@@ -41,7 +52,7 @@ router.post("/", restricted, async (req, res) => {
     deezer_id,
     location,
     video_title,
-    user_id,
+    user_id
   } = req.body;
 
   const songObject = {
@@ -79,7 +90,6 @@ router.post("/", restricted, async (req, res) => {
                 if (!user_id) {
                   res.status(400).json({ message: "Missing user_id!" });
                 } else {
-
                   const song = await Songs.add(songObject);
 
                   const videoObjectComplete = { ...videoObject, song_id: song };
@@ -97,10 +107,10 @@ router.post("/", restricted, async (req, res) => {
                         params: {
                           preview: preview,
                           video_id: video
-                        },
+                        }
                       }
                     )
-                    .catch((err) => console.log(err));
+                    .catch(err => console.log(err));
 
                   objectIds = {
                     songId: song,
@@ -131,15 +141,14 @@ router.put("/:id", restricted, (req, res) => {
   console.log(data);
 
   Videos.update(data, id)
-    .then((updatedVideo) => {
+    .then(updatedVideo => {
       console.log(updatedVideo);
       res.status(200).json({ message: "Successfully updated video!", data });
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
       res.status(500).json({ message: "Something failed", err });
     });
-
 });
 
 module.exports = router;
