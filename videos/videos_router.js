@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Videos = require("./video_model");
+const Videos = require("./videos_model");
 const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
 const axios = require("axios");
@@ -10,6 +10,15 @@ router.get("/", async (req, res) => {
     res.status(200).json({ videos });
   } catch (err) {
     res.status(500).json({ message: "Try again later.", err });
+  }
+});
+
+router.get("/random9", async (req, res) => {
+  try {
+    const {rows} = await Videos.find9();
+    res.status(200).json({rows});
+  } catch ({err}) {
+    res.status(500).json({errorMessage: `Encountered ${err} while retrieving videos from the database.`});
   }
 });
 
