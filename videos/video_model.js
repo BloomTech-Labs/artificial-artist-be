@@ -5,12 +5,13 @@ module.exports = {
   find,
   findBy,
   findById,
+  findByUser,
   update,
-  remove,
+  remove
 };
 
 async function add(data) {
-  const [ id ] = await db("videos").insert(data, "id");
+  const [id] = await db("videos").insert(data, "id");
 
   return id;
   // return findById(id);
@@ -18,8 +19,15 @@ async function add(data) {
 
 function find() {
   return db("videos")
-    .join('songs', 'songs.id', 'videos.song_id')
-    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.title", "songs.artist_name");
+    .join("songs", "songs.id", "videos.song_id")
+    .select(
+      "videos.id",
+      "videos.video_title",
+      "videos.location",
+      "videos.song_id",
+      "songs.title",
+      "songs.artist_name"
+    );
 }
 
 function findBy(filter) {
@@ -28,16 +36,39 @@ function findBy(filter) {
 
 function findById(id) {
   return db("videos")
-    .join('songs', 'songs.id', 'videos.song_id')
-    .select("videos.id", "videos.video_title", "videos.location", "videos.song_id", "songs.title_short", "songs.artist_name")
-    .where({ 'videos.id': id })
+    .join("songs", "songs.id", "videos.song_id")
+    .select(
+      "videos.id",
+      "videos.video_title",
+      "videos.location",
+      "videos.song_id",
+      "songs.title_short",
+      "songs.artist_name"
+    )
+    .where({ "videos.id": id })
     .first();
 }
 
+function findByUser(id) {
+  return db("videos")
+    .select(
+      "videos.id",
+      "videos.video_title",
+      "videos.location",
+      "videos.user_id"
+    )
+    .where({ "videos.user_id": id });
+}
+
 function update(data, id) {
-  return db("videos").where("id", id).update(data).returning("id");
+  return db("videos")
+    .where("id", id)
+    .update(data)
+    .returning("id");
 }
 
 function remove(id) {
-  return db("videos").where(id).del();
+  return db("videos")
+    .where(id)
+    .del();
 }
