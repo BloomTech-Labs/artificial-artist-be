@@ -10,8 +10,9 @@ router.use("/users", restricted, userRouter);
 router.use("/videos", videosRouter);
 router.use("/songs", restricted, songsRouter);
 
-router.get("/", (req, res) => {
-  res.json("Artificial Artist API");
+router.get('/', (req, res) => {
+    res.status(200).json('Artificial Artist API');
+
 });
 
 module.exports = router;
