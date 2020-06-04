@@ -11,8 +11,8 @@ module.exports = {
 
 async function add(data) {
   const [ id ] = await db("songs").insert(data, "id");
-
-  return findById(id);
+  // return findById(id);
+  return id;
 }
 
 function find() {

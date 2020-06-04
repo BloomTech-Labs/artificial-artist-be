@@ -15,8 +15,10 @@ exports.up = async function (knex, Promise) {
   });
   await knex.schema.createTable("videos", (video) => {
     video.increments();
-    video.string("video_title").unique().notNullable();
+    video.string("video_title").notNullable();
     video.string("location").notNullable();
+    video.boolean("video_created").defaultTo("false");
+    video.string("thumbnail");
     video
       .integer("song_id")
       .unsigned()
