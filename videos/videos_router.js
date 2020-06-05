@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post(  "/",  restricted,  checkfor([ "artist", "deezer_id", "location", "preview", "title", "user_id", "video_title" ]),  async (req, res) => {
+router.post( "/", restricted, checkfor([ "artist", "deezer_id", "location", "preview", "title", "user_id", "video_title" ]), async (req, res) => {
     const {
       artist,
       deezer_id,

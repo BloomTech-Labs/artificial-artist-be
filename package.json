@@ -12,7 +12,6 @@
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.0",
-    "knex-cleaner": "^1.3.0",
     "pg": "^8.0.2"
   },
   "devDependencies": {
@@ -24,7 +23,7 @@
   "scripts": {
     "server": "nodemon index.js",
     "start": "node index.js",
-    "test": "jest --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_ENV=testing jest --detectOpenHandles --forceExit --watch",
     "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
   },
   "repository": {
@@ -40,10 +39,14 @@
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
-      "**/*.js",
+      "**/*.{js,jsx}",
       "!**/node_modules/**",
       "!**/vendor/**",
-      "!**/__tests__/**"
+      "!**/database/**",
+      "!**/tests/**",
+      "!**/spec/**",
+      "!**/*.spec.{js,jsx}",
+      "!**/coverage/**"
     ]
   }
 }
