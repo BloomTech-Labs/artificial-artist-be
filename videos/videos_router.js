@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
     const videos = await Videos.find();
     res.status(200).json({ videos });
   } catch (err) {
-    res.status(500).json({ message: "Try again later 1", err });
+    res.status(500).json({ message: "Could not get videos", err });
   }
 });
 
@@ -32,7 +32,7 @@ router.get("/:id", async (req, res) => {
     const video = await Videos.findById(id);
     res.status(200).json(video);
   } catch (err) {
-    res.status(500).json({ message: "Try again later 2", err });
+    res.status(500).json({ message: "Could not find a video by this ID", err });
   }
 });
 
@@ -108,7 +108,7 @@ router.get("/user/:userId", async (req, res) => {
     const userVideos = await Videos.findByUser(userId);
     res.status(200).json(userVideos);
   } catch (err) {
-    res.status(500).json({ message: "Try again later.", err });
+    res.status(500).json({ message: "Could not get user videos", err });
   }
 });
 
@@ -226,7 +226,7 @@ router.put("/:id", restricted, (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({ message: "Something failed", err });
+      res.status(500).json({ message: "Unable to update video", err });
     });
 });
 
