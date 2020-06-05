@@ -26,7 +26,7 @@ function findBy(filter) {
 function findById(id) {
   return db("songs")
     .where({ id })
-    .select("deezer_id", "title_short", "artist_name", "preview")
+    .select("deezer_id", "artist_name")
     .first();
 }
 

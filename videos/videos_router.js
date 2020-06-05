@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Videos = require("./video_model");
+const Videos = require("./videos_model");
 const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
 const axios = require('axios')
@@ -13,6 +13,15 @@ router.get("/", async (req, res) => {
     res.status(200).json({ videos });
   } catch (err) {
     res.status(500).json({ message: "Try again later 1", err });
+  }
+});
+
+router.get("/random9", async (req, res) => {
+  try {
+    const {rows} = await Videos.find9();
+    res.status(200).json({rows});
+  } catch ({err}) {
+    res.status(500).json({errorMessage: `Encountered ${err} while retrieving videos from the database.`});
   }
 });
 
@@ -68,6 +77,16 @@ router.get("/single/check-for-file", async (req, res) => {
 // videos: video_title, location
 // We'll want to adjust the model to allow for both
 
+router.get("/user/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const userVideos = await Videos.findByUser(userId);
+    res.status(200).json(userVideos);
+  } catch (err) {
+    res.status(500).json({ message: "Try again later.", err });
+  }
+});
 
 router.post("/", restricted, async (req, res) => {
   const {
@@ -77,7 +96,7 @@ router.post("/", restricted, async (req, res) => {
     deezer_id,
     location,
     video_title,
-    user_id,
+    user_id
   } = req.body;
 
   const songObject = {
@@ -116,7 +135,6 @@ router.post("/", restricted, async (req, res) => {
                 if (!user_id) {
                   res.status(400).json({ message: "Missing user_id!" });
                 } else {
-
                   const song = await Songs.add(songObject);
 
                   const videoObjectComplete = { ...videoObject, song_id: song };
@@ -138,14 +156,14 @@ router.post("/", restricted, async (req, res) => {
                         },
                       }
                     )
-                    .catch((err) => console.log(err));
+                    .catch(err => console.log(err));
 
                   objectIds = {
                     songId: song,
                     videoId: video
                   };
 
-                  console.log(objectIds);;
+                  console.log(objectIds);
 
                   res.status(200).json(objectIds);
                 }
@@ -169,15 +187,14 @@ router.put("/:id", restricted, (req, res) => {
   console.log(data);
 
   Videos.update(data, id)
-    .then((updatedVideo) => {
+    .then(updatedVideo => {
       console.log(updatedVideo);
       res.status(200).json({ message: "Successfully updated video!", data });
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
       res.status(500).json({ message: "Something failed", err });
     });
-
 });
 
 module.exports = router;

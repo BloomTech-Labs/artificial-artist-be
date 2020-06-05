@@ -26,7 +26,7 @@
   "scripts": {
     "server": "nodemon index.js",
     "start": "node index.js",
-    "test": "jest --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_ENV=testing jest --detectOpenHandles --forceExit --watch",
     "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
   },
   "repository": {
@@ -42,10 +42,14 @@
   "jest": {
     "testEnvironment": "node",
     "collectCoverageFrom": [
-      "**/*.js",
+      "**/*.{js,jsx}",
       "!**/node_modules/**",
       "!**/vendor/**",
-      "!**/__tests__/**"
+      "!**/database/**",
+      "!**/tests/**",
+      "!**/spec/**",
+      "!**/*.spec.{js,jsx}",
+      "!**/coverage/**"
     ]
   }
 }
