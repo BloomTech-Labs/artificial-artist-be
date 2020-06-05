@@ -69,6 +69,7 @@ const s3 = new AWS.S3();
 //       res.status(500).json({ message: "You've found me", err });
 //     }
 // });
+let count = 0;
 
 const s3checker = (fileName, videoId) => {
   const params = {
@@ -82,9 +83,14 @@ const s3checker = (fileName, videoId) => {
     } else {
       s3.getSignedUrl("getObject", params, (err, data) => {
         if (err) {
-          setTimeout(() => {
-            res.status(500).json({ message: err })
-          }, 10000);
+          if (count <= 60) {
+            setTimeout(() => {
+              s3checker(fileName, videoId);
+              res.status(500).json({ message: `I'm still trying, ${err}` });
+            }, 10000);
+          } else {
+            res.status(500).json({ message: `I'm giving up, ${err}` });
+          }
         } else {
           Videos.update({ video_created: true }, videoId);
           res.status(200).json({ message: data })
