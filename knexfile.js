@@ -1,15 +1,9 @@
-require('dotenv').config();
+require("dotenv").config();
 
 module.exports = {
   development: {
     client: "pg",
-    connection: {
-      host: "127.0.0.1",
-      port: "5432",
-      user: "postgres",
-      password: process.env.PASS,
-      database: "Artificial-Artist-BE",
-    },
+    connection: process.env.DB_URL,
     pool: { min: 2, max: 10 },
     migrations: {
       directory: "./data/migrations",
@@ -34,19 +28,18 @@ module.exports = {
   production: {
     client: "pg",
     connection: {
-      host:
-        "database-artificialartist-test-pg.ccpwu09bb3on.us-east-1.rds.amazonaws.com",
-      port: "5432",
-      user: "postgres",
-      password: "postgres",
-      database: "database-artificialartist-test-pg",
+      host: process.env.HOST,
+      port: process.env.PORT,
+      user: process.env.USER,
+      password: process.env.PW,
+      database: process.env.DB,
     },
     pool: { min: 2, max: 10 },
     migrations: {
       directory: "./data/migrations",
     },
     seeds: {
-      directory: "./data/seeds"
-    }
-  }
+      directory: "./data/seeds",
+    },
+  },
 };
