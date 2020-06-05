@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Videos = require("./videos_model");
 const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
-const checkFor = require("../middleware/checkfor.js");
+const checkfor = require("../middleware/checkfor.js");
 const axios = require("axios");
 
 router.get("/", async (req, res) => {
@@ -36,20 +36,20 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post(  "/",  restricted,  checkFor([    "preview",    "title_short",    "artist",    "location",    "video_title",    "user_id",  ]),  async (req, res) => {
+router.post(  "/",  restricted,  checkfor([ "artist", "deezer_id", "location", "preview", "title", "user_id", "video_title" ]),  async (req, res) => {
     const {
-      title_short,
-      preview,
       artist,
       deezer_id,
       location,
-      video_title,
+      preview,
+      title,
       user_id,
+      video_title
     } = req.body;
 
     const songObject = {
       deezer_id: deezer_id,
-      title: title_short,
+      title: title,
       artist_name: artist,
     };
 
@@ -109,18 +109,14 @@ router.put("/:id", restricted, (req, res) => {
   console.log(data);
 
   Videos.update(data, id)
-    .then((updatedVideo) => {
+    .then(updatedVideo => {
       console.log(updatedVideo);
       res.status(200).json({ message: "Successfully updated video!", data });
     })
-    .catch((err) => {
+    .catch(err => {
       console.log(err);
       res.status(500).json({ message: "Something failed", err });
     });
 });
 
 module.exports = router;
-function newFunction() {
-  let checkfor;
-  return checkfor;
-}
