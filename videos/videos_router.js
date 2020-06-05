@@ -44,61 +44,57 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-// Check if S3 file exists
-// router.get("/single/check-for-file", async (req, res) => {
-//     const { fileName } = req.body;
-//     console.log(req.body);
-//     const params = {
-//       Bucket: process.env.AWS_BUCKET,
-//       Key: fileName,
-//     };
-//     console.log(params);
-//     try {
-//       s3.headObject(params, function (err, metadata) {
-//         if (err && err.code === "NotFound") {
-//           // Handle no object on cloud here
-//           console.log(err);
-//         } else {
-//           s3.getSignedUrl("getObject", params, (err, data) => {
-//             if (err) res.status(500).json({ message: err });
-//             else     res.status(200).json({ message: data });
-//           });
-//         }
-//       });
-//     } catch (err) {
-//       res.status(500).json({ message: "You've found me", err });
-//     }
-// });
+router.get("/single/file-check", async (req, res) => {
+  const { fileName, videoId } = req.body;
+
+  try {
+    s3checker(fileName, videoId);
+  } catch (err) {
+    res.status(500).json({ message: "Could not check video", err });
+  }
+});
+
 let count = 0;
 
 const s3checker = (fileName, videoId) => {
   const params = {
     Bucket: process.env.AWS_BUCKET,
-    Key: fileName,
+    Key: `${fileName}.mp4`,
   };
   s3.headObject(params, function (err, metadata) {
     if (err && err.code === "NotFound") {
       // Handle no object on cloud here
-      console.log(err);
+      if (count <= 60) {
+        // Retry checking if file exists every 10 seconds
+        // until it has been 10 minutes, then fail
+        setTimeout(() => {
+          s3checker(fileName, videoId);
+          count ++;
+          console.log(
+            `I'm still trying, ${
+              count * 10
+            } seconds, for file: ${params}, Error is: ${err}`
+          );
+        }, 10000);
+      } else {
+        let count = 0;
+        console.log(`I'm giving up, ${err}`);
+      }
     } else {
       s3.getSignedUrl("getObject", params, (err, data) => {
         if (err) {
-          if (count <= 60) {
-            setTimeout(() => {
-              s3checker(fileName, videoId);
-              res.status(500).json({ message: `I'm still trying, ${err}` });
-            }, 10000);
-          } else {
-            res.status(500).json({ message: `I'm giving up, ${err}` });
-          }
+          let count = 0;
+          console.log(`${err}`);
         } else {
+          // This is success!
+          let count = 0;
           Videos.update({ video_created: true }, videoId);
-          res.status(200).json({ message: data })
+          console.log(`Found the file!, ${data}`);
         }
       });
     }
   });
-}
+};
 
 // if you post to video
 // You want to check for main variables in two tables
@@ -181,7 +177,6 @@ router.post("/", restricted, async (req, res) => {
                   await axios
                     .post(
                       "http://artificial-artist.eba-cyfpphb2.us-east-1.elasticbeanstalk.com/entry",
-                      null,
                       {
                         params: {
                           preview: preview,
