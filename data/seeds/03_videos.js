@@ -4,7 +4,7 @@ exports.seed = function (knex, Promise) {
     .then(function () {
       return knex("videos").insert([
         {
-          video_title: "Today was A good Day for Lo Mein,
+          video_title: "Today was A good Day for Lo Mein",
           location: "https://artificial-artist.s3.amazonaws.com/cube.mp4",
           thumbnail: "https://i.imgur.com/2Zfzdcw.jpg",
           video_created: true,
