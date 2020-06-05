@@ -48,7 +48,7 @@ function findById(id) {
       "videos.video_title",
       "videos.location",
       "videos.song_id",
-      "songs.title_short",
+      "songs.title",
       "songs.artist_name"
     )
     .where({ "videos.id": id })

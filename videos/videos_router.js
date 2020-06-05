@@ -108,7 +108,7 @@ router.post("/", restricted, async (req, res) => {
   const videoObject = {
     video_title: video_title,
     // location will be known and use a UUID plus this https://artificial-artist.s3.amazonaws.com/
-    location: location,
+    location: "",
     song_id: "",
     user_id: user_id,
   };
@@ -137,26 +137,33 @@ router.post("/", restricted, async (req, res) => {
                 } else {
                   const song = await Songs.add(songObject);
 
-                  const videoObjectComplete = { ...videoObject, song_id: song };
+                  const videoId = uuid.v4();
+
+                  const videoObjectComplete = {
+                    ...videoObject,
+                    location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
+                    thumbnail: `https://artificial-artist.s3.amazonaws.com/${videoId}.jpg`,
+                    song_id: song,
+                  };
 
                   // we want song to return its id
                   // then we'll destructure or spread some object to add that in
                   // then we'll 'add' that object to videos.add
                   const video = await Videos.add(videoObjectComplete);
-                  const videoId = uuid.v4();
+                  
                   
                   axios
                     .post(
-                      "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry",
+                      "http://artificial-artist.eba-cyfpphb2.us-east-1.elasticbeanstalk.com/entry",
                       null,
                       {
                         params: {
                           preview: preview,
-                          video_id: videoId
+                          video_id: videoId,
                         },
                       }
                     )
-                    .catch(err => console.log(err));
+                    .catch((err) => console.log(err));
 
                   objectIds = {
                     songId: song,
