@@ -58,15 +58,11 @@ router.get("/single/file-check", async (req, res) => {
 // Multiple times and not have the count get arbitrarily reset
 const fileCheckExists = (fileName, videoId) => {
   let count = 0;
-  console.log(`Potential initial count: ${count}`);
-
   const s3checker = (fileName, videoId) => {
     const params = {
       Bucket: process.env.AWS_BUCKET,
       Key: `${fileName}.mp4`,
     };
-    console.log(`Count inside s3 ${count}, for file ${params.Key}`);
-    console.log(count);
     s3.headObject(params, function (err, metadata) {
       if (err && err.code === "NotFound") {
         // Handle no object on cloud here
