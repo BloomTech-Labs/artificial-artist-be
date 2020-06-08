@@ -54,6 +54,7 @@ router.get("/single/file-check", async (req, res) => {
   }
 });
 
+// Is leaving this in the global scope bad?
 let count = 0;
 
 const s3checker = (fileName, videoId) => {
@@ -73,7 +74,7 @@ const s3checker = (fileName, videoId) => {
           console.log(
             `I'm still trying, ${
               count * 10
-            } seconds, for file: ${params}, Error is: ${err}`
+            } seconds, for file: ${params.Key}, Error is: ${err}`
           );
         }, 10000);
       } else {
