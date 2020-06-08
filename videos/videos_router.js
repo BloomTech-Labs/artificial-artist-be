@@ -55,47 +55,54 @@ router.get("/single/file-check", async (req, res) => {
 });
 
 // Is leaving this in the global scope bad?
-let count = 0;
+const fileCheckExists = (fileName, videoId) => {
+  let count = 0;
+  console.log(`Potential initial count: ${count}`);
 
-const s3checker = (fileName, videoId) => {
-  const params = {
-    Bucket: process.env.AWS_BUCKET,
-    Key: `${fileName}.mp4`,
-  };
-  s3.headObject(params, function (err, metadata) {
-    if (err && err.code === "NotFound") {
-      // Handle no object on cloud here
-      if (count <= 60) {
-        // Retry checking if file exists every 10 seconds
-        // until it has been 10 minutes, then fail
-        setTimeout(() => {
-          s3checker(fileName, videoId);
-          count ++;
-          console.log(
-            `I'm still trying, ${
-              count * 10
-            } seconds, for file: ${params.Key}, Error is: ${err}`
-          );
-        }, 10000);
-      } else {
-        let count = 0;
-        console.log(`I'm giving up, ${err}`);
-      }
-    } else {
-      s3.getSignedUrl("getObject", params, (err, data) => {
-        if (err) {
-          let count = 0;
-          console.log(`${err}`);
+  const s3checker = (fileName, videoId) => {
+    const params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: `${fileName}.mp4`,
+    };
+    console.log(`Count inside s3 ${count}, for file ${params.Key}`);
+    console.log(count);
+    s3.headObject(params, function (err, metadata) {
+      if (err && err.code === "NotFound") {
+        // Handle no object on cloud here
+        if (count <= 60) {
+          // Retry checking if file exists every 10 seconds
+          // until it has been 10 minutes, then fail
+          setTimeout(() => {
+            s3checker(fileName, videoId);
+            count++;
+            console.log(
+              `I'm still trying, ${count * 10} seconds, for file: ${
+                params.Key
+              }, Error is: ${err}`
+            );
+          }, 10000);
         } else {
-          // This is success!
           let count = 0;
-          Videos.update({ video_created: true }, videoId);
-          console.log(`Found the file!, ${data}`);
+          console.log(`I'm giving up, ${err}`);
         }
-      });
-    }
-  });
+      } else {
+        s3.getSignedUrl("getObject", params, (err, data) => {
+          if (err) {
+            let count = 0;
+            console.log(`${err}`);
+          } else {
+            // This is success!
+            let count = 0;
+            Videos.update({ video_created: true }, videoId);
+            console.log(`Found the file!, ${data}`);
+          }
+        });
+      }
+    });
+  };
+  s3checker(fileName, videoId);
 };
+
 
 // if you post to video
 // You want to check for main variables in two tables
@@ -194,7 +201,7 @@ router.post("/", restricted, async (req, res) => {
 
                   console.log(objectIds);
 
-                  s3checker(videoId, video);
+                  fileCheckExists(videoId, video);
 
                   res
                     .status(200)
