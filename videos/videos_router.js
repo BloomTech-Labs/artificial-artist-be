@@ -54,7 +54,8 @@ router.get("/single/file-check", async (req, res) => {
   }
 });
 
-// Is leaving this in the global scope bad?
+// Not sure if this is the right way to do this, but nesting count inside this makes it so you can run the function
+// Multiple times and not have the count get arbitrarily reset
 const fileCheckExists = (fileName, videoId) => {
   let count = 0;
   console.log(`Potential initial count: ${count}`);
