@@ -4,13 +4,16 @@ const Songs = require("../songs/songs_model");
 const restricted = require("../middleware/restricted_middleware");
 const checkfor = require("../middleware/checkfor.js");
 const axios = require("axios");
+const uuid = require("uuid");
+const AWS = require("aws-sdk");
+require("dotenv").config();
 
 router.get("/", async (req, res) => {
   try {
     const videos = await Videos.find();
     res.status(200).json({ videos });
   } catch (err) {
-    res.status(500).json({ message: "Try again later.", err });
+    res.status(500).json({ message: "Could not get videos", err });
   }
 });
 
@@ -32,11 +35,105 @@ router.get("/:id", async (req, res) => {
     const video = await Videos.findById(id);
     res.status(200).json(video);
   } catch (err) {
-    res.status(500).json({ message: "Try again later.", err });
+    res.status(500).json({ message: "Could not find a video by this ID", err });
   }
 });
 
-router.post( "/", restricted, checkfor([ "artist", "deezer_id", "location", "preview", "title", "user_id", "video_title" ]), async (req, res) => {
+AWS.config.update({
+  subregion: "us-east-1",
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+
+const s3 = new AWS.S3();
+
+router.get("/single/file-check", async (req, res) => {
+  const { fileName, videoId } = req.body;
+
+  try {
+    s3checker(fileName, videoId);
+  } catch (err) {
+    res.status(500).json({ message: "Could not check video", err });
+  }
+});
+
+// Not sure if this is the right way to do this, but nesting count inside this makes it so you can run the function
+// Multiple times and not have the count get arbitrarily reset
+const fileCheckExists = (fileName, videoId) => {
+  let count = 0;
+  const s3checker = (fileName, videoId) => {
+    const params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: `${fileName}.mp4`,
+    };
+    s3.headObject(params, function (err, metadata) {
+      if (err && err.code === "NotFound") {
+        // Handle no object on cloud here
+        if (count <= 60) {
+          // Retry checking if file exists every 10 seconds
+          // until it has been 10 minutes, then fail
+          setTimeout(() => {
+            s3checker(fileName, videoId);
+            count++;
+            console.log(
+              `I'm still trying, ${count * 10} seconds, for file: ${
+                params.Key
+              }, Error is: ${err}`
+            );
+          }, 10000);
+        } else {
+          let count = 0;
+          console.log(`I'm giving up, ${err}`);
+        }
+      } else {
+        s3.getSignedUrl("getObject", params, (err, data) => {
+          if (err) {
+            let count = 0;
+            console.log(`${err}`);
+          } else {
+            // This is success!
+            let count = 0;
+            Videos.update({ video_created: true }, videoId);
+            console.log(`Found the file!, ${data}`);
+          }
+        });
+      }
+    });
+  };
+  s3checker(fileName, videoId);
+};
+
+// if you post to video
+// You want to check for main variables in two tables
+// Song table first because videos has a foreign key referencing the song.id
+// songs: deezer_id, title, artist_name
+// videos: video_title, location
+// We'll want to adjust the model to allow for both
+
+router.get("/user/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const userVideos = await Videos.findByUser(userId);
+    res.status(200).json(userVideos);
+  } catch (err) {
+    res.status(500).json({ message: "Could not get user videos", err });
+  }
+});
+
+router.post(
+  "/",
+  restricted,
+  checkfor([
+    "artist",
+    "deezer_id",
+    "location",
+    "preview",
+    "title",
+    "user_id",
+    "video_title",
+  ]),
+  async (req, res) => {
     const {
       artist,
       deezer_id,
@@ -44,7 +141,7 @@ router.post( "/", restricted, checkfor([ "artist", "deezer_id", "location", "pre
       preview,
       title,
       user_id,
-      video_title
+      video_title,
     } = req.body;
 
     const songObject = {
@@ -55,7 +152,8 @@ router.post( "/", restricted, checkfor([ "artist", "deezer_id", "location", "pre
 
     const videoObject = {
       video_title: video_title,
-      location: location,
+      location: "",
+      thumbnail: "",
       song_id: "",
       user_id: user_id,
     };
@@ -63,8 +161,11 @@ router.post( "/", restricted, checkfor([ "artist", "deezer_id", "location", "pre
     try {
       const song = await Songs.add(songObject);
 
+      const videoId = uuid.v4();
       const videoObjectComplete = {
         ...videoObject,
+        location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
+        thumbnail: `https://artificial-artist.s3.amazonaws.com/${videoId}.jpg`,
         song_id: song,
       };
 
@@ -72,11 +173,10 @@ router.post( "/", restricted, checkfor([ "artist", "deezer_id", "location", "pre
       // then we'll destructure or spread some object to add that in
       // then we'll 'add' that object to videos.add
       const video = await Videos.add(videoObjectComplete);
-      console.log(video);
-      axios
+
+      await axios
         .post(
-          "http://sample.eba-5jeurmbw.us-east-1.elasticbeanstalk.com/entry",
-          null,
+          "http://artificial-artist.eba-cyfpphb2.us-east-1.elasticbeanstalk.com/entry",
           {
             params: {
               preview: preview,
@@ -92,11 +192,15 @@ router.post( "/", restricted, checkfor([ "artist", "deezer_id", "location", "pre
       };
 
       console.log(objectIds);
+      fileCheckExists(videoId, video);
 
-      res.status(200).json(objectIds);
+      res.status(200).json({
+        message: "Successfully created video!",
+        objectIds,
+      });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: "Try again later!", err });
+      res.status(500).json({ message: "Could not post video", err });
     }
   }
 );
@@ -109,13 +213,13 @@ router.put("/:id", restricted, (req, res) => {
   console.log(data);
 
   Videos.update(data, id)
-    .then(updatedVideo => {
+    .then((updatedVideo) => {
       console.log(updatedVideo);
       res.status(200).json({ message: "Successfully updated video!", data });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
-      res.status(500).json({ message: "Something failed", err });
+      res.status(500).json({ message: "Unable to update video", err });
     });
 });
 
