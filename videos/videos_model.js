@@ -48,6 +48,7 @@ function findById(id) {
       "videos.id",
       "videos.video_title",
       "videos.location",
+      "videos.video_status",
       "videos.song_id",
       "songs.title",
       "songs.artist_name"
