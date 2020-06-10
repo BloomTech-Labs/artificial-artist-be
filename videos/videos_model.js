@@ -19,7 +19,7 @@ async function add(data) {
 }
 
 function find9() {
-  const res = db.raw("select * from videos ORDER BY random() limit 9 ");
+  const res = db.raw("select * from videos WHERE video_status='successful' ORDER BY random() limit 9 ");
   return res;
 }
 
