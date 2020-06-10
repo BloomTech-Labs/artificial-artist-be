@@ -19,8 +19,8 @@ router.get("/", async (req, res) => {
 
 router.get("/random9", async (req, res) => {
   try {
-    const { rows } = await Videos.find9();
-    res.status(200).json({ rows });
+    const videos = await Videos.find9();
+    res.status(200).json({ videos });
   } catch ({ err }) {
     res.status(500).json({
       errorMessage: `Encountered ${err} while retrieving videos from the database.`,

@@ -19,8 +19,11 @@ async function add(data) {
 }
 
 function find9() {
-  const res = db.raw("select * from videos WHERE video_status='successful' ORDER BY random() limit 9 ");
-  return res;
+  return db("videos")
+    .select()
+    .where("video_status", "successful")
+    .orderByRaw("RANDOM()")
+    .limit(9);
 }
 
 function find() {
