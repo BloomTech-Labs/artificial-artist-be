@@ -19,8 +19,11 @@ async function add(data) {
 }
 
 function find9() {
-  const res = db.raw("select * from videos ORDER BY random() limit 9 ");
-  return res;
+  return db("videos")
+    .select()
+    .where("video_status", "successful")
+    .orderByRaw("RANDOM()")
+    .limit(9);
 }
 
 function find() {
@@ -30,7 +33,7 @@ function find() {
       "videos.id",
       "videos.video_title",
       "videos.location",
-      "videos.video_created",
+      "videos.video_status",
       "videos.song_id",
       "songs.title",
       "songs.artist_name"
@@ -48,6 +51,7 @@ function findById(id) {
       "videos.id",
       "videos.video_title",
       "videos.location",
+      "videos.video_status",
       "videos.song_id",
       "songs.title",
       "songs.artist_name"

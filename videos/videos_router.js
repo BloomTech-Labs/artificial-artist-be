@@ -19,8 +19,8 @@ router.get("/", async (req, res) => {
 
 router.get("/random9", async (req, res) => {
   try {
-    const { rows } = await Videos.find9();
-    res.status(200).json({ rows });
+    const videos = await Videos.find9();
+    res.status(200).json({ videos });
   } catch ({ err }) {
     res.status(500).json({
       errorMessage: `Encountered ${err} while retrieving videos from the database.`,
@@ -83,6 +83,7 @@ const fileCheckExists = (fileName, videoId) => {
           }, 10000);
         } else {
           let count = 0;
+          Videos.update({ video_status: "failed" }, videoId);
           console.log(`I'm giving up, ${err}`);
         }
       } else {
@@ -93,7 +94,7 @@ const fileCheckExists = (fileName, videoId) => {
           } else {
             // This is success!
             let count = 0;
-            Videos.update({ video_created: true }, videoId);
+            Videos.update({ video_status: "successful" }, videoId);
             console.log(`Found the file!, ${data}`);
           }
         });
@@ -164,6 +165,7 @@ router.post(
       const videoId = uuid.v4();
       const videoObjectComplete = {
         ...videoObject,
+        video_status: "creating",
         location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
         thumbnail: `https://artificial-artist.s3.amazonaws.com/${videoId}.jpg`,
         song_id: song,
@@ -195,12 +197,12 @@ router.post(
       fileCheckExists(videoId, video);
 
       res.status(200).json({
-        message: "Successfully created video!",
+        message: "Successfully sent video to the DS server!",
         objectIds,
       });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: "Could not post video", err });
+      res.status(500).json({ message: "Could not post video to DS server", err });
     }
   }
 );
