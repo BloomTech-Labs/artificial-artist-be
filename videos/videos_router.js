@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const Videos = require("./videos_model");
 const Songs = require("../songs/songs_model");
-const restricted = require("../middleware/restricted_middleware");
-const checkfor = require("../middleware/checkfor.js");
+const { restricted, checkFor } = require("../middleware/middleware");
+// const checkfor = require("../middleware/checkfor.js");
 const axios = require("axios");
 const uuid = require("uuid");
 const AWS = require("aws-sdk");
@@ -27,6 +27,17 @@ router.get("/random9", async (req, res) => {
     });
   }
 });
+
+// router.get("/hero", async (req, res) => {
+//   try {
+//     const video = await Videos.hero();
+//     res.status(200).json(video);
+//   } catch ({ err }) {
+//     res.status(500).json({
+//       errorMessage: `Encountered ${err} while retrieving hero video from the database.`,
+//     });
+//   }
+// });
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -122,15 +133,35 @@ router.get("/user/:userId", async (req, res) => {
   }
 });
 
+  // [
+  //   middleware.restricted,
+  //   middleware.checkFor([
+  //     "artist",
+  //     "deezer_id",
+  //     "location",
+  //     "preview",
+  //     "title",
+  //     "user_id",
+  //     "video_title",
+  //   ]),
+  // ],
+
 router.post(
   "/",
   restricted,
-  checkfor([
-    "artist",
-    "deezer_id",
-    "location",
+  // checkFor([
+  //     "artist",
+  //     "deezer_id",
+  //     "preview",
+  //     "title_short",
+  //     "user_id",
+  //     "video_title",
+  //   ]),
+  checkFor([
+    // "artist",
+    // "deezer_id",
     "preview",
-    "title",
+    "title_short",
     "user_id",
     "video_title",
   ]),
@@ -140,14 +171,14 @@ router.post(
       deezer_id,
       location,
       preview,
-      title,
+      title_short,
       user_id,
       video_title,
     } = req.body;
 
     const songObject = {
       deezer_id: deezer_id,
-      title: title,
+      title: title_short,
       artist_name: artist,
     };
 
@@ -160,6 +191,15 @@ router.post(
     };
 
     try {
+
+      const songExists = await Songs.findByDeezer(deezer_id);
+
+      if (songExists) {
+
+      } else {
+        
+      }
+      
       const song = await Songs.add(songObject);
 
       const videoId = uuid.v4();
@@ -186,6 +226,13 @@ router.post(
             },
           }
         )
+        .then(() => {
+          console.log("Successfully sent video to the DS server!");
+          // res.status(200).json({
+          //   message: "Successfully sent video to the DS server!",
+          //   objectIds,
+          // });
+        })
         .catch((err) => console.log(err));
 
       objectIds = {
@@ -195,14 +242,15 @@ router.post(
 
       console.log(objectIds);
       fileCheckExists(videoId, video);
-
       res.status(200).json({
         message: "Successfully sent video to the DS server!",
         objectIds,
       });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: "Could not post video to DS server", err });
+      // res
+      //   .status(500)
+      //   .json({ message: "Could not post video to DS server", err });
     }
   }
 );

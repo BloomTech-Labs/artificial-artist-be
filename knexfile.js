@@ -34,19 +34,18 @@ module.exports = {
   production: {
     client: "pg",
     connection: {
-      host:
-        "database-artificialartist-test-pg.ccpwu09bb3on.us-east-1.rds.amazonaws.com",
-      port: "5432",
-      user: "postgres",
-      password: "postgres",
-      database: "database-artificialartist-test-pg",
+      host: process.env.RDS_HOSTNAME_PROD,
+      port: process.env.RDS_PORT_PROD,
+      user: process.env.RDS_USERNAME_PROD,
+      password: process.env.RDS_PASSWORD_PROD,
+      database: process.env.RDS_DB_PROD,
     },
     pool: { min: 2, max: 10 },
     migrations: {
       directory: "./data/migrations",
     },
     seeds: {
-      directory: "./data/seeds"
-    }
-  }
+      directory: "./data/seeds",
+    },
+  },
 };

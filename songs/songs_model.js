@@ -23,6 +23,10 @@ function findBy(filter) {
   return db("songs").where(filter);
 }
 
+function findByDeezer(id) {
+  return db("songs").where({ deezer_id });
+}
+
 function findById(id) {
   return db("songs")
     .where({ id })

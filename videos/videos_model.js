@@ -9,6 +9,7 @@ module.exports = {
   update,
   remove,
   find9,
+  // hero
 };
 
 async function add(data) {
@@ -24,6 +25,14 @@ function find9() {
     .where("video_status", "successful")
     .orderByRaw("RANDOM()")
     .limit(9);
+}
+
+function hero() {
+  return db("videos")
+    .select()
+    .where("video_status", "successful")
+    .orderByRaw("RANDOM()")
+    .limit(1);
 }
 
 function find() {
