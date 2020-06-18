@@ -121,7 +121,6 @@ router.get("/user/:userId", async (req, res) => {
     res.status(500).json({ message: "Could not get user videos", err });
   }
 });
-
 router.post(
   "/",
   restricted,
@@ -159,9 +158,20 @@ router.post(
       user_id: user_id,
     };
 
-    try {
-      const song = await Songs.add(songObject);
 
+
+const songExists = await Songs.findByDeezer(deezer_id);
+      const videoId = uuid.v4();
+      if (songExists) {
+        const videoObjectComplete = {
+          ...videoObject,
+          video_status: "creating",
+          location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
+          thumbnail: `https://artificial-artist.s3.amazonaws.com/${videoId}.jpg`,
+          song_id: songExists,
+        };
+      } else {
+      const song = await Songs.add(songObject);
       const videoId = uuid.v4();
       const videoObjectComplete = {
         ...videoObject,
