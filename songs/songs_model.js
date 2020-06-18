@@ -10,7 +10,7 @@ module.exports = {
 };
 
 async function add(data) {
-  const [ id ] = await db("songs").insert(data, "id");
+  const [id] = await db("songs").insert(data, "id");
   // return findById(id);
   return id;
 }
@@ -22,12 +22,11 @@ function find() {
 function findBy(filter) {
   return db("songs").where(filter);
 }
-
+function findByDeezer(id) {
+  return db("songs").where({ deezer_id });
+}
 function findById(id) {
-  return db("songs")
-    .where({ id })
-    .select("deezer_id", "artist_name")
-    .first();
+  return db("songs").where({ id }).select("deezer_id", "artist_name").first();
 }
 
 function update(data, id) {
