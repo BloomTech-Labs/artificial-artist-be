@@ -140,14 +140,21 @@ router.post(
       deezer_id,
       location,
       preview,
-      title,
+      title_short,
       user_id,
       video_title,
+      im_group,
+      jitter,
+      depth,
+      truncation,
+      pitch_sensitivity,
+      tempo_sensitivity,
+      smooth_factor,
     } = req.body;
 
     const songObject = {
       deezer_id: deezer_id,
-      title: title,
+      title: title_short,
       artist_name: artist,
     };
 
@@ -183,6 +190,13 @@ router.post(
             params: {
               preview: preview,
               video_id: video,
+              im_group: im_group,
+              jitter: jitter,
+              depth: depth,
+              truncation: truncation,
+              pitch_sensitivity: pitch_sensitivity,
+              tempo_sensitivity: tempo_sensitivity,
+              smooth_factor: smooth_factor,
             },
           }
         )
@@ -202,7 +216,9 @@ router.post(
       });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: "Could not post video to DS server", err });
+      res
+        .status(500)
+        .json({ message: "Could not post video to DS server", err });
     }
   }
 );
