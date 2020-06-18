@@ -121,6 +121,7 @@ router.get("/user/:userId", async (req, res) => {
     res.status(500).json({ message: "Could not get user videos", err });
   }
 });
+
 router.post(
   "/",
   restricted,
@@ -133,6 +134,7 @@ router.post(
     "user_id",
     "video_title",
   ]),
+
   async (req, res) => {
     const {
       artist,
@@ -157,13 +159,12 @@ router.post(
       song_id: "",
       user_id: user_id,
     };
-
-
-
-const songExists = await Songs.findByDeezer(deezer_id);
+    try {
+      const songExists = await Songs.findByDeezer(deezer_id);
       const videoId = uuid.v4();
+      let videoObjectComplete;
       if (songExists) {
-        const videoObjectComplete = {
+        videoObjectComplete = {
           ...videoObject,
           video_status: "creating",
           location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
@@ -171,20 +172,20 @@ const songExists = await Songs.findByDeezer(deezer_id);
           song_id: songExists,
         };
       } else {
-      const song = await Songs.add(songObject);
-      const videoId = uuid.v4();
-      const videoObjectComplete = {
-        ...videoObject,
-        video_status: "creating",
-        location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
-        thumbnail: `https://artificial-artist.s3.amazonaws.com/${videoId}.jpg`,
-        song_id: song,
-      };
+        const song = await Songs.add(songObject);
+        videoObjectComplete = {
+          ...videoObject,
+          video_status: "creating",
+          location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
+          thumbnail: `https://artificial-artist.s3.amazonaws.com/${videoId}.jpg`,
+          song_id: song,
+        };
+      }
+      const video = await Videos.add(videoObjectComplete);
 
       // we want song to return its id
       // then we'll destructure or spread some object to add that in
       // then we'll 'add' that object to videos.add
-      const video = await Videos.add(videoObjectComplete);
 
       await axios
         .post(
@@ -198,12 +199,12 @@ const songExists = await Songs.findByDeezer(deezer_id);
         )
         .catch((err) => console.log(err));
 
-      objectIds = {
+      const objectIds = {
         songId: song,
         videoId: video,
       };
 
-      console.log(objectIds);
+      console.log({ objectIds });
       fileCheckExists(videoId, video);
 
       res.status(200).json({
@@ -211,8 +212,9 @@ const songExists = await Songs.findByDeezer(deezer_id);
         objectIds,
       });
     } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Could not post video to DS server", err });
+      res
+        .status(500)
+        .json({ message: "Could not post video to DS server", err });
     }
   }
 );
