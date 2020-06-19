@@ -161,7 +161,6 @@ router.post(
     };
     try {
       const songExists = await Songs.findByDeezer(deezer_id);
-      const video = await Videos.add(videoObjectComplete);
       const videoId = uuid.v4();
       let videoObjectComplete;
       if (songExists) {
@@ -182,6 +181,7 @@ router.post(
           song_id: song,
         };
       }
+      const video = await Videos.add(videoObjectComplete);
 
       // we want song to return its id
       // then we'll destructure or spread some object to add that in
