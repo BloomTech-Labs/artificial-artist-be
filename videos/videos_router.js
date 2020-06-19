@@ -128,9 +128,8 @@ router.post(
   checkfor([
     "artist",
     "deezer_id",
-    "location",
     "preview",
-    "title",
+    "title_short",
     "user_id",
     "video_title",
   ]),
@@ -138,7 +137,6 @@ router.post(
     const {
       artist,
       deezer_id,
-      location,
       preview,
       title_short,
       user_id,
