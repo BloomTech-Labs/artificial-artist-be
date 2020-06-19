@@ -212,6 +212,7 @@ router.post(
         objectIds,
       });
     } catch (err) {
+      console.log({ err });
       res
         .status(500)
         .json({ message: "Could not post video to DS server", err });
