@@ -120,8 +120,6 @@ To get the server running locally:
   `remove(id)` -> Removes a video  by id
   
 <br>
-<br>
-<br>
 
 ### Users
 
@@ -140,16 +138,19 @@ To get the server running locally:
   `remove(id)` -> Remove user by id
   
 <br>
-<br>
-<br>
 
 ### Songs
 
   `add(data)` -> Add song
+  
   `find()` -> Return all songs
+  
   `findBy(filter)` -> Return all songs that math filter object
+  
   `findById(id)` -> Return song that matches id
+  
   `update(data, id)` -> Update song that matches id
+  
   `remove(id)` -> Remove song that matches id
 
 ## 3️⃣ Environment Variables
