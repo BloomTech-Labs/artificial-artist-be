@@ -6,7 +6,7 @@ const videosRouter = require("../videos/videos_router.js");
 const songsRouter = require("../songs/songs_router");
 
 router.use("/auth", authRouter);
-router.use("/users", restricted, userRouter);
+router.use("/users", userRouter);
 router.use("/videos", videosRouter);
 router.use("/songs", restricted, songsRouter);
 
