@@ -53,8 +53,8 @@ exports.seed = function (knex, Promise) {
         },
         {
           video_title: "Tuxedos Floating on a River",
-          location: "https://artificial-artist.s3.amazonaws.com/bri1.mp4",
-          thumbnail: "https://i.imgur.com/2Zfzdcw.jpg",
+          location: "https://artificial-artist.s3.amazonaws.com/hq-demo2.mp4",
+          thumbnail: "https://artificial-artist.s3.amazonaws.com/hq-demo2.jpg",
           video_status: "successful",
           song_id: 7,
           user_id: 1,
@@ -64,14 +64,14 @@ exports.seed = function (knex, Promise) {
           location:
             "https://artificial-artist.s3.amazonaws.com/TarantulaCrisp.mp4",
           thumbnail: "https://i.imgur.com/2Zfzdcw.jpg",
-          video_status: "failed",
+          video_status: "successful",
           song_id: 8,
           user_id: 1,
         },
         {
           video_title: "the way of the web",
-          location: "https://artificial-artist.s3.amazonaws.com/3.mp4",
-          thumbnail: "https://i.imgur.com/2Zfzdcw.jpg",
+          location: "https://artificial-artist.s3.amazonaws.com/hq-demo1.mp4",
+          thumbnail: "https://artificial-artist.s3.amazonaws.com/hq-demo1.jpg",
           video_status: "successful",
           song_id: 9,
           user_id: 1,
