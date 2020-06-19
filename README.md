@@ -101,43 +101,73 @@ To get the server running locally:
 
 ## 2️⃣ Actions
 
-🚫 This is an example, replace this with the actions that pertain to your backend
+### Videos
 
-`getOrgs()` -> Returns all organizations
-
-`getOrg(orgId)` -> Returns a single organization by ID
-
-`addOrg(org)` -> Returns the created org
-
-`updateOrg(orgId)` -> Update an organization by ID
-
-`deleteOrg(orgId)` -> Delete an organization by ID
+  `add(data)` -> Adds a video
+  
+  `find()` -> Returns all videos with a join with some song information
+  
+  `find9()` -> Returns a randomized set of 9 successfully created videos
+  
+  `findBy(filter)` -> Returns videos that match by a specified object
+  
+  `findById(id)` -> Returns a single video by id
+  
+  `findByUser(id)` -> Returns all videos created by a specific user
+  
+  `update(data, id)` -> Updates a video by id
+  
+  `remove(id)` -> Removes a video  by id
+  
 <br>
 <br>
 <br>
-`getUsers(orgId)` -> if no param all users
 
-`getUser(userId)` -> Returns a single user by user ID
+### Users
 
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
+  `add(data)` -> Add user
+  
+  `find()` -> Return all users
+  
+  `findBy(filter)` -> Return all users that match by specified object
+  
+  `findById(id)` -> Return user that matches id
+  
+  `findIdByUsername(username)` -> Return user that matches username
+  
+  `update(data, id)` -> Update user by id
+  
+  `remove(id)` -> Remove user by id
+  
+<br>
+<br>
+<br>
 
-`updateUser(userId, changes object)` -> Updates a single user by ID.
+### Songs
 
-`deleteUser(userId)` -> deletes everything dependent on the user
+  `add(data)` -> Add song
+  `find()` -> Return all songs
+  `findBy(filter)` -> Return all songs that math filter object
+  `findById(id)` -> Return song that matches id
+  `update(data, id)` -> Update song that matches id
+  `remove(id)` -> Remove song that matches id
 
 ## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
-
-🚫 These are just examples, replace them with the specifics for your app
     
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
+    *  PASS - This is your local database password
+    *  NODE_ENV - set to 'development' unless you want to run seeds on 'production'
+    *  AWS_BUCKET - Set to the appropriate bucket name
+    *  AWS_ACCESS_KEY_ID - Set to appropriate access key id associated with your user
+    *  AWS_SECRET_ACCESS_KEY - Set to appropriate secret access key for your user
+    *  RDS_USERNAME_PROD - This is your Amazon RDS username
+    *  RDS_PASSWORD_PROD - This is your Amazon RDS password
+    *  RDS_HOSTNAME_PROD - This is your Amazon RDS hostname
+    *  RDS_PORT_PROD - This is your Amazon RDS port
+    *  RDS_DB_PROD - This is your Amazon RDS database name
     
 ## Contributing
 
@@ -177,5 +207,5 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/artificial-artist-fe) for details on the fronend of our project.
+See [Datascience Documentation](https://github.com/Lambda-School-Labs/artificial-artist-ds) for details on the datascience part of our project
