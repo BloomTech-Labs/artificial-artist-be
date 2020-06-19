@@ -1,6 +1,6 @@
 # Artificial Artist API Documentation
 
-#### 1️⃣ Backend delpoyed at AWS ElasticBeanstalk (https://api.theartificialartist.com/api)
+#### 1️⃣ Backend deployed at AWS ElasticBeanstalk (https://api.theartificialartist.com/api)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/66e0f92a8649e3fc0514/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/artificial-artist-be/maintainability)
 
