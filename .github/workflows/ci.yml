@@ -1,5 +1,7 @@
-name: Artificial Artist Backend Testing
-on: [push, pull_request]
+name: Artificial Artist Backend
+on:
+  - pull_request
+  - push
 jobs:
   coverage:
     name: Test and publish test coverage
