@@ -1,4 +1,4 @@
-name: Artificial Artist Web Backend
+name: Artificial Artist Backend
 on:
   - pull_request
   - push
