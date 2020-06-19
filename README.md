@@ -9,9 +9,9 @@
 #### 1️⃣ Backend delpoyed at AWS ElasticBeanstalk (🚫add URL here) <br>
 
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/22f407bd56973f8acfc5/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/groovn-be/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/66e0f92a8649e3fc0514/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/artificial-artist-be/maintainability)
 
-[![Test Coverage](https://api.codeclimate.com/v1/badges/22f407bd56973f8acfc5/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/groovn-be/test_coverage)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/66e0f92a8649e3fc0514/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/artificial-artist-be/test_coverage)
 
 ## 1️⃣ Getting started
 
