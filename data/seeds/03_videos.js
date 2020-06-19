@@ -13,8 +13,8 @@ exports.seed = function (knex, Promise) {
         },
         {
           video_title: "Cali Loves Mashed Potatoes",
-          location: "https://artificial-artist.s3.amazonaws.com/CAlove.mp4",
-          thumbnail: "https://i.imgur.com/2Zfzdcw.jpg",
+          location: "https://artificial-artist.s3.amazonaws.com/hq-demo3.mp4",
+          thumbnail: "https://artificial-artist.s3.amazonaws.com/hq-demo3.jpg",
           video_status: "successful",
           song_id: 2,
           user_id: 1,
@@ -61,7 +61,8 @@ exports.seed = function (knex, Promise) {
         },
         {
           video_title: "TarantulaCrisp",
-          location: "https://artificial-artist.s3.amazonaws.com/TarantulaCrisp.mp4",
+          location:
+            "https://artificial-artist.s3.amazonaws.com/TarantulaCrisp.mp4",
           thumbnail: "https://i.imgur.com/2Zfzdcw.jpg",
           video_status: "failed",
           song_id: 8,
@@ -117,8 +118,7 @@ exports.seed = function (knex, Promise) {
         },
         {
           video_title: "Collies on my mind",
-          location:
-            "https://artificial-artist.s3.amazonaws.com/bri2.mp4",
+          location: "https://artificial-artist.s3.amazonaws.com/bri2.mp4",
           thumbnail: "https://imgur.com/lLeteDr",
           video_status: "successful",
           song_id: 9,
