@@ -1,4 +1,3 @@
-```yaml
 # The name of the workflow
 name: build
 
@@ -43,7 +42,6 @@ jobs:
           # Run our `coverage` script in our `package.json`
           coverageCommand: npm run coverage
           # By default, this looks for a `coverage` folder in the root of your project, but you may need to change this
-          coverageLocations: "./coverage/clover.xml:clover"
+          coverageLocations: "./artificial-artist-be/coverage/lcov.info:lcov"
           # Great for troubleshooting
           debug: true
-```
