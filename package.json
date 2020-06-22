@@ -1,7 +1,7 @@
 {
   "name": "artificial-artist-be",
   "version": "1.0.0",
-  "description": "🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.",
+  "description": "The Artificial Artist Web Backend",
   "main": "index.js",
   "dependencies": {
     "aws-sdk": "^2.681.0",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "jest": "^25.5.3",
+    "mock-knex": "^0.4.9",
     "nodemon": "^2.0.3",
     "supertest": "^4.0.2"
   },

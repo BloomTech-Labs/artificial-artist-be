@@ -1,12 +1,15 @@
 const request = require("supertest");
 const server = require("../api/server");
-const Songs = require("../data/db_config");
-const model = require("./songs_model");
-// var knexCleaner = require("knex-cleaner");
+const db = require("../data/db_config");
+const model = require("../songs/songs_model");
 
-// beforeAll(async () => {
-//   await knexCleaner.clean(Songs);
-// });
+beforeAll(async () => {
+	await db.seed.run();
+});
+
+afterAll(async () => {
+	await db.destroy();
+});
 
 describe("GET /", () => {
   it("is using right testing environment", () => {
@@ -14,11 +17,11 @@ describe("GET /", () => {
   });
 });
 
-describe("GET /api/song", () => {
-  it("pulls all songs", () => {
-    request(server)
-      .get("./api/song")
-      .then((songs) => expect(songs).toHaveLength(7));
+describe("GET /api/songs", () => {
+  
+  it("pulls all songs", async () => {
+    const songs = await model.find()
+      .then((songs) => expect(songs).toHaveLength(9));
   });
 
   it("pulls song by id", async () => {

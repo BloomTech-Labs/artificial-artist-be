@@ -1,5 +1,5 @@
 const request = require("supertest");
-const router = require("./api_router");
+const router = require("../api/api_router");
 
 describe("api_router", () => {
   //test if in testing environment
