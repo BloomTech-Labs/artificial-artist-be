@@ -37,7 +37,8 @@ function find() {
       "videos.song_id",
       "songs.title",
       "songs.artist_name"
-    );
+    )
+    .where("video_status", "successful")
 }
 
 function findBy(filter) {
