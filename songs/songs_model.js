@@ -5,6 +5,7 @@ module.exports = {
   find,
   findBy,
   findById,
+  findByDeezer,
   update,
   remove,
 };
@@ -30,6 +31,10 @@ function findById(id) {
     .first();
 }
 
+function findByDeezer(deezer_id) {
+  return db("songs").where({ deezer_id });
+}
+
 function update(data, id) {
   return db("songs").where(id).update(data);
 }
@@ -37,3 +42,4 @@ function update(data, id) {
 function remove(id) {
   return db("songs").where(id).del();
 }
+
