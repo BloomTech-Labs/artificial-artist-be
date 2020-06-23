@@ -83,8 +83,13 @@ const fileCheckExists = (fileName, videoId) => {
           }, 10000);
         } else {
           let count = 0;
-          Videos.update({ video_status: "failed" }, videoId);
-          console.log(`I'm giving up, ${err}`);
+          Videos.update({ video_status: "failed" }, videoId)
+            .then(() => {
+              console.log(`I'm giving up, ${err}`);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       } else {
         s3.getSignedUrl("getObject", params, (err, data) => {
@@ -94,8 +99,13 @@ const fileCheckExists = (fileName, videoId) => {
           } else {
             // This is success!
             let count = 0;
-            Videos.update({ video_status: "successful" }, videoId);
-            console.log(`Found the file!, ${data}`);
+            Videos.update({ video_status: "successful" }, videoId)
+            .then(() => {
+              console.log(`Found the file!, ${data}`);
+            })
+            .catch(err => {
+              console.log(err);
+            });
           }
         });
       }
