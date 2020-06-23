@@ -187,7 +187,7 @@ router.post(
           {
             params: {
               preview: preview,
-              video_id: video,
+              video_id: videoId,
               im_group: im_group,
               jitter: jitter,
               depth: depth,
