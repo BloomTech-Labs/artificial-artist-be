@@ -128,9 +128,8 @@ router.post(
   checkfor([
     "artist",
     "deezer_id",
-    "location",
     "preview",
-    "title",
+    "title_short",
     "user_id",
     "video_title",
   ]),
@@ -138,16 +137,22 @@ router.post(
     const {
       artist,
       deezer_id,
-      location,
       preview,
-      title,
+      title_short,
       user_id,
       video_title,
+      im_group,
+      jitter,
+      depth,
+      truncation,
+      pitch_sensitivity,
+      tempo_sensitivity,
+      smooth_factor,
     } = req.body;
 
     const songObject = {
       deezer_id: deezer_id,
-      title: title,
+      title: title_short,
       artist_name: artist,
     };
 
@@ -160,20 +165,29 @@ router.post(
     };
 
     try {
-      const song = await Songs.add(songObject);
+
+      // Check if song exists in database by deezer id
+      // If yes, return the id for that song
+      // If no, add the song, then return the new id
+      let songId;
+      const songCheck = await Songs.findByDeezer(songObject.deezer_id);
+      if (songCheck[0] && songCheck[0].artist_name.length > 0) {
+        songId = songCheck[0].id;
+      } else {
+        const song = await Songs.add(songObject);
+        songId = song;
+      }
 
       const videoId = uuid.v4();
+
       const videoObjectComplete = {
         ...videoObject,
         video_status: "creating",
         location: `https://artificial-artist.s3.amazonaws.com/${videoId}.mp4`,
         thumbnail: `https://artificial-artist.s3.amazonaws.com/${videoId}.jpg`,
-        song_id: song,
+        song_id: songId,
       };
 
-      // we want song to return its id
-      // then we'll destructure or spread some object to add that in
-      // then we'll 'add' that object to videos.add
       const video = await Videos.add(videoObjectComplete);
 
       await axios
@@ -182,14 +196,21 @@ router.post(
           {
             params: {
               preview: preview,
-              video_id: video,
+              video_id: videoId,
+              im_group: im_group,
+              jitter: jitter,
+              depth: depth,
+              truncation: truncation,
+              pitch_sensitivity: pitch_sensitivity,
+              tempo_sensitivity: tempo_sensitivity,
+              smooth_factor: smooth_factor,
             },
           }
         )
         .catch((err) => console.log(err));
 
       objectIds = {
-        songId: song,
+        songId: songId,
         videoId: video,
       };
 
@@ -202,7 +223,9 @@ router.post(
       });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: "Could not post video to DS server", err });
+      res
+        .status(500)
+        .json({ message: "Could not post video to DS server", err });
     }
   }
 );
