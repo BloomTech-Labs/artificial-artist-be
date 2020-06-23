@@ -68,7 +68,11 @@ function findByUser(id) {
       "videos.location",
       "videos.user_id"
     )
-    .where({ "videos.user_id": id });
+    .where({
+      "video_status": "successful",
+      "videos.user_id": id,
+    })
+    .orderBy("videos.id");
 }
 
 function update(data, id) {
