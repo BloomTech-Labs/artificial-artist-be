@@ -69,10 +69,10 @@ const fileCheckExists = (fileName, videoId) => {
     s3.headObject(params, function (err, metadata) {
       if (err && err.code === "NotFound") {
         // Handle no object on cloud here
-        // 20 minutes of checking if it exists
-        if (count <= 60) {
+        // 20 minutes of file checking before failing
+        if (count <= 120) {
           // Retry checking if file exists every 10 seconds
-          // until it has been 10 minutes, then fail
+          // until it has been 20 minutes, then fail
           setTimeout(() => {
             s3checker(fileName, videoId);
             count++;
