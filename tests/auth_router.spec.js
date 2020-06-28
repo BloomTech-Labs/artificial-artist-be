@@ -16,7 +16,7 @@ server.use('/', authRouter);
 // });
 
 const newUser = {
-  email: "tester@email.com",
+  email: "tester@fakemail.com",
   username: "RockC137",
   password: "password321",
   first_name: "Rick",
@@ -24,21 +24,19 @@ const newUser = {
 }
 
 describe('register/login', ()=>{
-  test('POST /api/auth/register', async ()=>{
+  test('POST /register', async ()=>{
     const mock = jest.spyOn(Users, 'add');
     mock.mockImplementation(()=> Promise.resolve([newUser]))
-    const res = await request(server).post('//api/auth/register').send(newUser);
+    const res = await request(server).post('/register').send(newUser);
     expect(res.status).toBe(201);
     expect(res.type).toBe('application/json');
-    expect(res.body).toHaveProperty('token');
-    expect(res.body).toHaveProperty('user');
     mock.mockRestore();
   })
   
   describe("POST /login", () => {
     it("allows login", async () => {
       const res = await request(server)
-        .post("/api/auth/login")
+        .post("/login")
         .send({ email: "abcgen@email.com", password: "password123" })
         expect(res.status).toEqual(200);
     });
