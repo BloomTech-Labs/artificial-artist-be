@@ -69,9 +69,10 @@ const fileCheckExists = (fileName, videoId) => {
     s3.headObject(params, function (err, metadata) {
       if (err && err.code === "NotFound") {
         // Handle no object on cloud here
-        if (count <= 60) {
+        // 20 minutes of file checking before failing
+        if (count <= 120) {
           // Retry checking if file exists every 10 seconds
-          // until it has been 10 minutes, then fail
+          // until it has been 20 minutes, then fail
           setTimeout(() => {
             s3checker(fileName, videoId);
             count++;
@@ -83,8 +84,13 @@ const fileCheckExists = (fileName, videoId) => {
           }, 10000);
         } else {
           let count = 0;
-          Videos.update({ video_status: "failed" }, videoId);
-          console.log(`I'm giving up, ${err}`);
+          Videos.update({ video_status: "failed" }, videoId)
+            .then(() => {
+              console.log(`I'm giving up, ${err}`);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       } else {
         s3.getSignedUrl("getObject", params, (err, data) => {
@@ -94,8 +100,13 @@ const fileCheckExists = (fileName, videoId) => {
           } else {
             // This is success!
             let count = 0;
-            Videos.update({ video_status: "successful" }, videoId);
-            console.log(`Found the file!, ${data}`);
+            Videos.update({ video_status: "successful" }, videoId)
+            .then(() => {
+              console.log(`Found the file!, ${data}`);
+            })
+            .catch(err => {
+              console.log(err);
+            });
           }
         });
       }
