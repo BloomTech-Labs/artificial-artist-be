@@ -21,7 +21,7 @@ describe("GET /", () => {
 describe("GET /api/videos", () => {
   it("pulls all videos", async () => {
     const res = await model.find()
-      .then((res) => expect(res).toHaveLength(8));
+      .then((res) => expect(res).toHaveLength(9));
   });
 
   it("pulls video by id", async () => {

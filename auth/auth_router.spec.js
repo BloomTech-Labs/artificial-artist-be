@@ -1,47 +1,40 @@
+const express = require('express');
+const server = express();
 const request = require("supertest");
-const server = require("../api/api_router");
-const db = require("../data/db_config");
+const authRouter = require("../auth/auth_router");
+// const db = require("../data/db_config");
+const Users = require('../users/users_model')
+server.use(express.json());
+server.use('/', authRouter);
 
+// beforeAll(async () => {
+// 	await db.seed.run();
+// });
 
-beforeAll(async () => {
-	await db.seed.run();
-});
+// afterAll(async () => {
+// 	await db.destroy();
+// });
 
-afterAll(async () => {
-	await db.destroy();
-});
+const newUser = {
+  email: "tester@email.com",
+  username: "RockC137",
+  password: "password321",
+  first_name: "Rick",
+  last_name: "Sanchez",
+}
 
 describe('register/login', ()=>{
-  // it('add new user', async ()=>{
-    // const newUser = {
-    //   email: "tester@email.com",
-    //   username: "RockC137",
-    //   password: "password321",
-    //   first_name: "Rick",
-    //   last_name: "Sanchez",
-    // }
-  //   const res = await request(server)
-  //     .post("/api/auth/register")
-  //     .send({
-  //       email: "tester@email.com",
-  //       username: "RockC137",
-  //       password: "password321",
-  //       first_name: "Rick",
-  //       last_name: "Sanchez",
-  //     })
-  //     expect(res.body).toEqual(
-	// 			expect.objectContaining({
-	// 				user: {
-	// 					id: expect.any(Number),
-	// 					email: expect.any(String),
-	// 					username: expect.any(String),
-	// 					first_name: expect.any(String),
-	// 					last_name: expect.any(String),
-	// 				},
-	// 				token: expect.any(String),
-	// 			})
-	// 		);
-  // });
+  test('POST /api/auth/register', async ()=>{
+    const mock = jest.spyOn(Users, 'add');
+    mock.mockImplementation(()=> Promise.resolve([newUser]))
+    const res = await request(server).post('//api/auth/register').send(newUser);
+    expect(res.status).toBe(201);
+    expect(res.type).toBe('application/json');
+    expect(res.body).toHaveProperty('token');
+    expect(res.body).toHaveProperty('user');
+    mock.mockRestore();
+  })
+  
   describe("POST /login", () => {
     it("allows login", async () => {
       const res = await request(server)
